@@ -8,12 +8,11 @@ public class BonusAdjust : MonoBehaviour
 {
     public TextMeshProUGUI nameField;
     public TMP_InputField amountField;
-    public GameObject dicePrefab;
     public Button minusButton;
     public Button plusButton;
     public DiceSetup diceSetup;
 
-    public void Start()
+    void Awake()
     {
         nameField = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         amountField = transform.GetChild(1).GetComponent<TMP_InputField>();

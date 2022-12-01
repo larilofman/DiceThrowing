@@ -12,6 +12,7 @@ public class DiceSetup : MonoBehaviour
     public GameObject diceAdjustPrefab;
     public GameObject bonusAdjustPrefab;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
+    private BonusAdjust bonusAdjust;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +31,7 @@ public class DiceSetup : MonoBehaviour
             DiceAdjust diceAdjust = diceAdjustObj.GetComponent<DiceAdjust>();
             diceAdjust.diceSetup = this;
 
+            // Add one dice for the first type on the dice prefabs list, others empty
             int initialAmount = 0;
             if(i == 0)
             {
@@ -38,15 +40,14 @@ public class DiceSetup : MonoBehaviour
             diceAdjust.Init(dicePrefabs[i], initialAmount);
 
             diceAdjusts.Add(diceAdjust);
-            //Debug.Log(diceName);
-            //Debug.Log(dicePrefabs[0].name);
         }
-        Instantiate(bonusAdjustPrefab, adjustParent.transform);
+        GameObject bonusAdjustObj = Instantiate(bonusAdjustPrefab, adjustParent.transform);
+        bonusAdjust = bonusAdjustObj.GetComponent<BonusAdjust>();
     }
 
     public void PrepaceDice()
     {
-        diceThrower.SpawnDice(diceAdjusts);
+        diceThrower.SpawnDice(diceAdjusts, bonusAdjust);
     }
 
     public int TotalDiceSetup()

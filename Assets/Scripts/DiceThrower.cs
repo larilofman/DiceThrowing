@@ -9,6 +9,8 @@ public class DiceThrower : MonoBehaviour
     public float throwingForce;
     public List<GameObject> floatingDice = new List<GameObject>();
     public List<GameObject> storedDice = new List<GameObject>();
+    public GameObject floatingBonus;
+    public GameObject bonusPrefab;
     private ScoreManager scoreManager;
     private List<Vector3> positions = new List<Vector3>();
     float randomness = 0.1f;
@@ -36,6 +38,9 @@ public class DiceThrower : MonoBehaviour
             Destroy(oldDice);
         }
         floatingDice.Clear();
+
+        Destroy(floatingBonus);
+        floatingBonus = null;
     }
 
     public void ClearTable()
@@ -56,7 +61,7 @@ public class DiceThrower : MonoBehaviour
         floatingDice.Clear();
     }
 
-    public void SpawnDice(List<DiceAdjust> diceAdjusts)
+    public void SpawnDice(List<DiceAdjust> diceAdjusts, BonusAdjust bonusAdjust)
     {
         int totalDice = 0;
         foreach (DiceAdjust diceAdjust in diceAdjusts)
@@ -74,6 +79,12 @@ public class DiceThrower : MonoBehaviour
                 floatingDice.Add(instantiatedDice);
             }
         }
+
+        GameObject instantiatedBonus = Instantiate(bonusPrefab);
+        Bonus bonus = instantiatedBonus.GetComponent<Bonus>();
+        bonus.Init(bonusAdjust.GetAmount());
+        floatingBonus = instantiatedBonus;
+        scoreManager.SetBonus(bonus);
     }
 
     Vector3 GetPosition()

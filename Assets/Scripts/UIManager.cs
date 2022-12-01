@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject throwPanel;
     public GameObject rethrowPanel;
     public GameObject setupPanel;
+    public TextMeshProUGUI scoreTitle;
     public TextMeshProUGUI scoreTextPrefab;
     public RectTransform scoreTextParent;
     public TextMeshProUGUI totalScoreText;
@@ -44,8 +46,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void InsertScore(List<DiceResult> diceResults)
+    public void InsertScore(List<DiceResult> diceResults, Bonus bonus)
     {
+        Dictionary<string, int> diceAmounts = new Dictionary<string, int>();
+
         ClearScore();
         foreach (DiceResult diceResult in diceResults)
         {
@@ -54,10 +58,31 @@ public class UIManager : MonoBehaviour
             string paddedResult = result.PadRight(5 - result.Length);
             TextMeshProUGUI scoreText = Instantiate(scoreTextPrefab, scoreTextParent);
             scoreText.text = $"<b>{paddedResult}</b> ({diceResult.type})";
-            //scoreString += $"<b>{paddedResult}</b> ({diceResult.type})\n";
+
+            if (diceAmounts.ContainsKey(diceResult.type))
+            {
+                diceAmounts[diceResult.type] = diceAmounts[diceResult.type] + 1;
+            }
+            else
+            {
+                diceAmounts.Add(diceResult.type, 1);
+            }
+            
         }
+        int bonusAmount = bonus.GetBonus();
+        if(bonusAmount != 0)
+        {
+            totalScore += bonusAmount;
+            string bonusString = bonusAmount.ToString();
+            string paddedBonus = bonusString.PadRight(5 - bonusString.Length);
+            TextMeshProUGUI bonusText = Instantiate(scoreTextPrefab, scoreTextParent);
+            bonusText.text = $"<b>{paddedBonus}</b> (Bonus)";          
+        }
+
+        UpdateTitle(diceAmounts, bonusAmount);
+
         totalScoreText.text = $"Total: <b>{totalScore}</b>";
-        //scoreText.text = scoreString;
+
     }
     public void ShowScore(bool hideOthers=false)
     {
@@ -83,5 +108,33 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         throwPanel.gameObject.SetActive(true);
+    }
+
+    void UpdateTitle(Dictionary<string, int> diceAmounts, int bonusAmount)
+    {
+        List<string> dices = new List<string>();
+        foreach (KeyValuePair<string, int> dice in diceAmounts)
+        {
+            dices.Add($"{dice.Value}{dice.Key}");
+        }
+
+        string titleString = "";
+        for (int i = 0; i < dices.Count; i++)
+        {
+            titleString += dices[i];
+            if (dices.Count > 1 && i != dices.Count - 1) 
+            {
+                titleString += "+";
+            }
+        }
+        if(bonusAmount > 0)
+        {
+            titleString += $"+{bonusAmount}";
+        } else if (bonusAmount < 0)
+        {
+            titleString += $"{bonusAmount}";
+        }
+        
+        scoreTitle.text = titleString;
     }
 }

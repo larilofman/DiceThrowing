@@ -989,6 +989,8 @@ MonoBehaviour:
   throwingForce: 800
   floatingDice: []
   storedDice: []
+  floatingBonus: {fileID: 0}
+  bonusPrefab: {fileID: 5465778896954000379, guid: c2583a721c5b85c4aa5386d46a886354, type: 3}
 --- !u!114 &554707013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2397,9 +2399,21 @@ MonoBehaviour:
   throwPanel: {fileID: 1090072026}
   rethrowPanel: {fileID: 1036642039}
   setupPanel: {fileID: 230453972}
+  scoreTitle: {fileID: 1284677573}
   scoreTextPrefab: {fileID: 8615468895643069245, guid: cbb1da916a9484542998f26e00cdc474, type: 3}
   scoreTextParent: {fileID: 1168826837}
   totalScoreText: {fileID: 807844474}
+--- !u!114 &1284677573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2173589990881934407, guid: 65307498df7a50c4a95827f97cc87a0b, type: 3}
+  m_PrefabInstance: {fileID: 2173589990800217455}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1297182818 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2807799101050116007, guid: 50464fc7dbb990d48ad909957e03e861, type: 3}
@@ -3062,7 +3076,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2173589990881934407, guid: 65307498df7a50c4a95827f97cc87a0b, type: 3}
       propertyPath: m_text
-      value: Result
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2173589990881934407, guid: 65307498df7a50c4a95827f97cc87a0b, type: 3}
+      propertyPath: m_fontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2173589990881934407, guid: 65307498df7a50c4a95827f97cc87a0b, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 2173589990881934408, guid: 65307498df7a50c4a95827f97cc87a0b, type: 3}
       propertyPath: m_Pivot.x

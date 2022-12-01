@@ -9,16 +9,12 @@ public class ScoreManager : MonoBehaviour
     public UIManager uiManager;
     public CamMover camMover;
     private DiceThrower diceThrower;
-    private List<DiceScore> diceScores = new List<DiceScore>(); 
+    private List<DiceScore> diceScores = new List<DiceScore>();
+    private Bonus bonus;
 
     void Start()
     {
         diceThrower = GetComponent<DiceThrower>();
-    }
-
-    void Update()
-    {
-        
     }
 
     public void ResetScore()
@@ -59,7 +55,7 @@ public class ScoreManager : MonoBehaviour
         //    string paddedResult = result.PadRight(5 - result.Length);
         //    scoreString += $"<b>{paddedResult}</b> ({diceResult.type})\n";
         //}
-        uiManager.InsertScore(diceResults);
+        uiManager.InsertScore(diceResults, bonus);
     }
 
     static int SortByType(DiceResult d1, DiceResult d2)
@@ -89,5 +85,8 @@ public class ScoreManager : MonoBehaviour
         return (meanVector / positions.Count);
     }
 
-
+    public void SetBonus(Bonus _bonus)
+    {
+        bonus = _bonus;
+    }
 }
