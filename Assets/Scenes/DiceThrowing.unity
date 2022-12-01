@@ -289,7 +289,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &69081384
 MonoBehaviour:
@@ -482,7 +482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5102919389404411019, guid: 26f2b0cbc3fa22941be5dc3dfc600b30, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26f2b0cbc3fa22941be5dc3dfc600b30, type: 3}
@@ -966,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554707010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.58, z: -5.75}
+  m_LocalPosition: {x: 0, y: 7.5, z: -5.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1018,10 +1018,12 @@ MonoBehaviour:
   diceThrower: {fileID: 554707012}
   adjustParent: {fileID: 69081383}
   dicePrefabs:
+  - {fileID: 6620160644590663068, guid: 3b76d120d5d9c6e4ab85c6cf0083ccd4, type: 3}
   - {fileID: 4981776532839565725, guid: acb3f45d14a251b4fab0fc7006fd4367, type: 3}
   - {fileID: 4981776532839565725, guid: 70edce5842616ad4a813884688c7af7f, type: 3}
   - {fileID: 6339445606622173392, guid: 2db919038935a9c42aa1e4ac165d9e88, type: 3}
   diceAdjustPrefab: {fileID: 5001997000952651801, guid: 19000bb865a992c49b756784274141ce, type: 3}
+  bonusAdjustPrefab: {fileID: 5001997000952651801, guid: c7fd1d24ee5878243b89e3098915fe0f, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

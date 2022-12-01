@@ -10,6 +10,7 @@ public class DiceSetup : MonoBehaviour
     public RectTransform adjustParent;
     public List<GameObject> dicePrefabs = new List<GameObject>();
     public GameObject diceAdjustPrefab;
+    public GameObject bonusAdjustPrefab;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,7 @@ public class DiceSetup : MonoBehaviour
             //Debug.Log(diceName);
             //Debug.Log(dicePrefabs[0].name);
         }
+        Instantiate(bonusAdjustPrefab, adjustParent.transform);
     }
 
     public void PrepaceDice()

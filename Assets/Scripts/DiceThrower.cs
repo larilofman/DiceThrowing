@@ -87,7 +87,7 @@ public class DiceThrower : MonoBehaviour
     private List<Vector3> CreatePositions(int amount)
     {
         int maxWidth = 7;
-        int maxHeight = 3;
+        int maxHeight = 2;
         float gap = 1.5f;
 
         positions = new List<Vector3>();

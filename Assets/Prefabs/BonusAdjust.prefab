@@ -529,9 +529,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8860111030506514625}
-  - component: {fileID: 1682358673}
+  - component: {fileID: 1666223806751200358}
   m_Layer: 5
-  m_Name: DiceAdjust
+  m_Name: BonusAdjust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -561,7 +561,7 @@ RectTransform:
   m_AnchoredPosition: {x: 5, y: -55}
   m_SizeDelta: {x: 190, y: 25}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1682358673
+--- !u!114 &1666223806751200358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5001997000952651801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ce86134388852c429e95bf97d46bcb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 69c939ad0c002a84b81f0791695b387e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameField: {fileID: 0}
@@ -645,7 +645,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Bonus
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
