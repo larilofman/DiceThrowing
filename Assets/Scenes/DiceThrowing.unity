@@ -1021,6 +1021,9 @@ MonoBehaviour:
   adjustParent: {fileID: 69081383}
   dicePrefabs:
   - {fileID: 6620160644590663068, guid: 3b76d120d5d9c6e4ab85c6cf0083ccd4, type: 3}
+  - {fileID: 6620160644590663068, guid: 4eeab5a8c9b018c4a8e83be634773c95, type: 3}
+  - {fileID: 6620160644590663068, guid: 083e411ffda50ce45a0882f70817b727, type: 3}
+  - {fileID: 6620160644590663068, guid: fef05ca42489fcd4fb457be31ab48335, type: 3}
   - {fileID: 4981776532839565725, guid: acb3f45d14a251b4fab0fc7006fd4367, type: 3}
   - {fileID: 4981776532839565725, guid: 70edce5842616ad4a813884688c7af7f, type: 3}
   - {fileID: 6339445606622173392, guid: 2db919038935a9c42aa1e4ac165d9e88, type: 3}
@@ -1660,7 +1663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1958,7 +1961,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
