@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public EventManager eventManager;
     public GameObject scorePanel;
     public GameObject throwPanel;
     public GameObject rethrowPanel;
@@ -17,17 +18,34 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI totalScoreText;
     int totalScore;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
+    {
+        eventManager.EventReadyToThrow.AddListener(ReadyToThrowEventHandler);
+        eventManager.EventThrowPressed.AddListener(DiceThrownEventHandler);
+        eventManager.EventSetupOpened.AddListener(SetupOpenedEventHandler);
+        eventManager.EventSetupAccepted.AddListener(SetupAcceptedEventHandler);
+    }
+
+    void DiceThrownEventHandler()
+    {
+        HideUI();
+    }
+
+    void ReadyToThrowEventHandler()
     {
         ShowThrow();
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetupOpenedEventHandler()
     {
-        
+        ShowSetup();
     }
-    
+
+    void SetupAcceptedEventHandler()
+    {
+        ShowThrow();
+    }
+
     public void HideUI()
     {
         throwPanel.gameObject.SetActive(false);
@@ -36,7 +54,7 @@ public class UIManager : MonoBehaviour
         rethrowPanel.gameObject.SetActive(false);
     }
 
-    private void ClearScore()
+    public void ClearScore()
     {
         totalScore = 0;
 
@@ -50,7 +68,6 @@ public class UIManager : MonoBehaviour
     {
         Dictionary<string, int> diceAmounts = new Dictionary<string, int>();
 
-        ClearScore();
         foreach (DiceResult diceResult in diceResults)
         {
             totalScore += diceResult.result;
@@ -69,7 +86,7 @@ public class UIManager : MonoBehaviour
             }
             
         }
-        int bonusAmount = bonus.GetBonus();
+        int bonusAmount = bonus.GetResult();
         if(bonusAmount != 0)
         {
             totalScore += bonusAmount;

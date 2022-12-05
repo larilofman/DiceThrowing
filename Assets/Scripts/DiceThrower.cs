@@ -13,13 +13,15 @@ public class DiceThrower : MonoBehaviour
     public GameObject bonusPrefab;
     private ScoreManager scoreManager;
     private List<Vector3> positions = new List<Vector3>();
-    float randomness = 0.1f;
-    // Start is called before the first frame update
-    void Start()
+    private float randomness = 0.1f;
+    private EventManager eventManager;
+
+    void Awake()
     {
         scoreManager = GetComponent<ScoreManager>();
-        //SpawnDice(); 
-        
+        eventManager = GetComponent<EventManager>();
+        eventManager.EventThrowPressed.AddListener(DiceThrownEventHandler);
+        eventManager.EventSetupOpened.AddListener(SetupOpenedEventHandler);
     }
 
     // Update is called once per frame
@@ -31,7 +33,17 @@ public class DiceThrower : MonoBehaviour
         }
     }
 
-    public void ClearDice()
+    void DiceThrownEventHandler()
+    {
+        StartThrow();
+    }
+
+    void SetupOpenedEventHandler()
+    {
+        ClearFloatingDice();
+    }
+
+    public void ClearFloatingDice()
     {
         foreach (GameObject oldDice in floatingDice)
         {
@@ -61,16 +73,17 @@ public class DiceThrower : MonoBehaviour
         floatingDice.Clear();
     }
 
-    public void SpawnDice(List<DiceAdjust> diceAdjusts, BonusAdjust bonusAdjust)
+    public void SpawnDice(List<Adjust> adjusts)
     {
         int totalDice = 0;
-        foreach (DiceAdjust diceAdjust in diceAdjusts)
+        foreach (Adjust diceAdjust in adjusts)
         {
             totalDice += diceAdjust.GetAmount();
         }
+
         positions = CreatePositions(totalDice);
 
-        foreach (DiceAdjust diceAdjust in diceAdjusts)
+        foreach (Adjust diceAdjust in adjusts)
         {
             for (int i = 0; i < diceAdjust.GetAmount(); i++)
             {
@@ -80,11 +93,11 @@ public class DiceThrower : MonoBehaviour
             }
         }
 
-        GameObject instantiatedBonus = Instantiate(bonusPrefab);
-        Bonus bonus = instantiatedBonus.GetComponent<Bonus>();
-        bonus.Init(bonusAdjust.GetAmount());
-        floatingBonus = instantiatedBonus;
-        scoreManager.SetBonus(bonus);
+        //GameObject instantiatedBonus = Instantiate(bonusPrefab);
+        //Bonus bonus = instantiatedBonus.GetComponent<Bonus>();
+        //bonus.Init(bonusAdjust.GetAmount());
+        //floatingBonus = instantiatedBonus;
+        //scoreManager.SetBonus(bonus);
     }
 
     Vector3 GetPosition()
@@ -149,7 +162,7 @@ public class DiceThrower : MonoBehaviour
         return Random.Range(-randomness, randomness);
     }
 
-    public void StartThrow()
+    void StartThrow()
     {
         foreach (GameObject dice in floatingDice)
         {

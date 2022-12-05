@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 
-public class DiceScore : MonoBehaviour
+public class DiceScore : Score
 {
     [System.NonSerialized] // Added by DiceThrower upon instantiating dice
     public ScoreManager scoreManager;
@@ -32,7 +32,7 @@ public class DiceScore : MonoBehaviour
         scoreManager.DiceStopped(this);
     }
 
-    public int GetResult()
+    public override int GetResult()
     {
         GameObject highestSide = sides.transform.GetChild(0).gameObject;
         foreach (Transform child in sides.transform)

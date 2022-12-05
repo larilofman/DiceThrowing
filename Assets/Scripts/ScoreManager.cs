@@ -9,12 +9,14 @@ public class ScoreManager : MonoBehaviour
     public UIManager uiManager;
     public CamMover camMover;
     private DiceThrower diceThrower;
+    private EventManager eventManager;
     private List<DiceScore> diceScores = new List<DiceScore>();
     private Bonus bonus;
 
     void Start()
     {
         diceThrower = GetComponent<DiceThrower>();
+        eventManager = GetComponent<EventManager>();
     }
 
     public void ResetScore()

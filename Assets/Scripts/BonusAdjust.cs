@@ -4,31 +4,33 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
-public class BonusAdjust : MonoBehaviour
+public class BonusAdjust : Adjust
 {
-    public TextMeshProUGUI nameField;
-    public TMP_InputField amountField;
-    public Button minusButton;
-    public Button plusButton;
-    public DiceSetup diceSetup;
+    //void Awake()
+    //{
+    //    nameField = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+    //    amountField = transform.GetChild(1).GetComponent<TMP_InputField>();
+    //    nameField.text = "Bonus";
+    //    SetAmount(0);
 
-    void Awake()
+    //    minusButton = transform.GetChild(2).GetComponent<Button>();
+    //    plusButton = transform.GetChild(3).GetComponent<Button>();
+    //    minusButton.onClick.AddListener(Decrease);
+    //    plusButton.onClick.AddListener(Increase);
+
+    //    amountField.characterValidation = TMP_InputField.CharacterValidation.Integer;
+    //    amountField.onValueChanged.AddListener(delegate (string value) { TrimValue(value); });
+    //}
+
+    public override void Init(string diceName, int amountDice, GameObject prefab = null)
     {
-        nameField = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        amountField = transform.GetChild(1).GetComponent<TMP_InputField>();
-        nameField.text = "Bonus";
-        SetAmount(0);
-
-        minusButton = transform.GetChild(2).GetComponent<Button>();
-        plusButton = transform.GetChild(3).GetComponent<Button>();
-        minusButton.onClick.AddListener(Decrease);
-        plusButton.onClick.AddListener(Increase);
-
+        base.Init(diceName, amountDice, prefab);
+        dicePrefab = null;
         amountField.characterValidation = TMP_InputField.CharacterValidation.Integer;
-        amountField.onValueChanged.AddListener(delegate (string value) { TrimValue(value); });
+        Debug.Log("???");
     }
 
-    void TrimValue(string value)
+    protected override void TrimValue(string value)
     {
         if (value == "")
         {
@@ -46,25 +48,8 @@ public class BonusAdjust : MonoBehaviour
         }
     }
 
-    public void SetAmount(int value)
+    public override void SetAmount(int value)
     {
         amountField.text = value.ToString();
-    }
-
-    public int GetAmount()
-    {
-        return int.Parse(amountField.text);
-    }
-
-    private void Increase()
-    {
-        int newAmount = GetAmount() + 1;
-        SetAmount(newAmount);
-    }
-
-    private void Decrease()
-    {
-        int newAmount = GetAmount() - 1;
-        SetAmount(newAmount);
     }
 }

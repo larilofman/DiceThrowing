@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bonus : MonoBehaviour
+public class Bonus : Score
 {
     private int _bonus;
     public void Init(int bonus)
@@ -10,7 +10,7 @@ public class Bonus : MonoBehaviour
         _bonus = bonus;
     }
 
-    public int GetBonus()
+    public override int GetResult()
     {
         return _bonus;
     }

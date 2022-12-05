@@ -11,6 +11,7 @@ public class CamMover : MonoBehaviour
     public DiceSetup diceSetup;
     public ScoreManager scoreManager;
     public DiceThrower diceThrower;
+    public EventManager eventManager;
     private Vector3 originalPos;
     private Quaternion originalRot;
 
@@ -19,6 +20,7 @@ public class CamMover : MonoBehaviour
     {
         originalPos = transform.position;
         originalRot = transform.rotation;
+        eventManager.Ready();
     }
 
     public void ZoomToDice(Vector3 targetPos)
@@ -93,11 +95,12 @@ public class CamMover : MonoBehaviour
         uiManager.ShowScore(true);
         yield return new WaitForSeconds(delay);
         uiManager.ShowThrow();
+        scoreManager.ResetScore();
         if (resetScore)
         {
-            scoreManager.ResetScore();
+            uiManager.ClearScore();
             diceThrower.ClearTable();
         }
-        diceSetup.PrepaceDice();
+        diceSetup.PrepareDice();
     }
 }
