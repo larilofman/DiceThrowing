@@ -12,14 +12,14 @@ public class DiceThrower : MonoBehaviour
     public GameObject floatingBonus;
     public GameObject bonusPrefab;
     private ScoreManager scoreManager;
-    private List<Vector3> positions = new List<Vector3>();
-    private float randomness = 0.1f;
     private EventManager eventManager;
+    private DiceManager diceManager;
 
     void Awake()
     {
         scoreManager = GetComponent<ScoreManager>();
         eventManager = GetComponent<EventManager>();
+        diceManager = GetComponent<DiceManager>();
         eventManager.EventThrowPressed.AddListener(DiceThrownEventHandler);
         eventManager.EventSetupOpened.AddListener(SetupOpenedEventHandler);
     }
@@ -73,104 +73,14 @@ public class DiceThrower : MonoBehaviour
         floatingDice.Clear();
     }
 
-    public void SpawnDice(List<Adjust> adjusts)
-    {
-        int totalDice = 0;
-        foreach (Adjust diceAdjust in adjusts)
-        {
-            totalDice += diceAdjust.GetAmount();
-        }
-
-        positions = CreatePositions(totalDice);
-
-        foreach (Adjust diceAdjust in adjusts)
-        {
-            for (int i = 0; i < diceAdjust.GetAmount(); i++)
-            {
-                Vector3 spawnPos = transform.position + GetPosition();
-                GameObject instantiatedDice = Instantiate(diceAdjust.dicePrefab, spawnPos, Quaternion.identity);
-                floatingDice.Add(instantiatedDice);
-            }
-        }
-
-        //GameObject instantiatedBonus = Instantiate(bonusPrefab);
-        //Bonus bonus = instantiatedBonus.GetComponent<Bonus>();
-        //bonus.Init(bonusAdjust.GetAmount());
-        //floatingBonus = instantiatedBonus;
-        //scoreManager.SetBonus(bonus);
-    }
-
-    Vector3 GetPosition()
-    {
-        int index = Random.Range(0, positions.Count);
-        Vector3 pos = positions[index];
-        positions.RemoveAt(index);
-        return pos;
-    }
-
-    private List<Vector3> CreatePositions(int amount)
-    {
-        int maxWidth = 7;
-        int maxHeight = 2;
-        float gap = 1.5f;
-
-        positions = new List<Vector3>();
-
-        float x = 0;
-        float y = 0;
-        float z = 0;
-        int placedOnRow = 0;
-        int rowsPlaced = 0;
-        int columnsPlaced = 0;
-
-        for (int i = 0; i < amount; i++)
-        {
-            // place every other dice on right and every other on left
-            if (i % 2 == 0)
-            {
-                x = (-placedOnRow - 1) / 2 * gap;
-            }
-            else
-            {
-                x = (placedOnRow + 1) / 2 * gap;
-            }
-            y = rowsPlaced * gap;
-            z = columnsPlaced * gap;
-            placedOnRow++;
-
-            // next row
-            if(placedOnRow == maxWidth)
-            {
-                placedOnRow = 0;
-                rowsPlaced++;
-
-                // next z-depth-thingy
-                if (rowsPlaced == maxHeight)
-                {
-                    rowsPlaced = 0;
-                    columnsPlaced++;
-                }
-            }   
-            Vector3 pos = new Vector3(x + GetRandomness(), y + GetRandomness(), z + GetRandomness());
-            positions.Add(pos);
-        }
-        return positions;
-    }
-
-    float GetRandomness()
-    {
-        return Random.Range(-randomness, randomness);
-    }
-
     void StartThrow()
     {
-        foreach (GameObject dice in floatingDice)
+        foreach (GameObject dice in diceManager.activeDice)
         {
             Rigidbody diceRb = dice.GetComponent<Rigidbody>();
             diceRb.constraints = RigidbodyConstraints.None;
             DiceScore diceScore = dice.GetComponent<DiceScore>();
-            diceScore.thrown = true;
-            diceScore.scoreManager = scoreManager;
+            diceScore.Init(eventManager);
             ThrowDice(diceRb);
         }
     }

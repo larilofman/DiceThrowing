@@ -7,10 +7,11 @@ using Unity.VisualScripting;
 
 public class DiceAdjust : Adjust
 {
-    public override void Init(string diceName, int amountDice, GameObject prefab = null)
+    public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
-        base.Init(diceName,amountDice, prefab);
+        base.Init(prefab, amount, _eventManager);
         dicePrefab = prefab;
+        nameField.text = prefab.name;
         amountField.characterValidation = TMP_InputField.CharacterValidation.Digit;
     }
 

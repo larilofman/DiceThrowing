@@ -20,7 +20,14 @@ public class CamMover : MonoBehaviour
     {
         originalPos = transform.position;
         originalRot = transform.rotation;
-        eventManager.Ready();
+        eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
+    }
+
+    void AllDiceStoppedEventHandler(List<DiceScore> dices)
+    {
+        Debug.Log(dices);
+        Vector3 zoomSpot = GetMeanVector(dices);
+        ZoomToDice(zoomSpot);
     }
 
     public void ZoomToDice(Vector3 targetPos)
@@ -102,5 +109,27 @@ public class CamMover : MonoBehaviour
             diceThrower.ClearTable();
         }
         diceSetup.PrepareDice();
+    }
+
+    private Vector3 GetMeanVector(List<DiceScore> diceScores)
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (DiceScore diceScore in diceScores)
+        {
+            positions.Add(diceScore.transform.position);
+        }
+        if (positions.Count == 0)
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 meanVector = Vector3.zero;
+
+        foreach (Vector3 pos in positions)
+        {
+            meanVector += pos;
+        }
+
+        return (meanVector / positions.Count);
     }
 }

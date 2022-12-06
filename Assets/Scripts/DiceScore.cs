@@ -6,11 +6,11 @@ using UnityEngine;
 public class DiceScore : Score
 {
     [System.NonSerialized] // Added by DiceThrower upon instantiating dice
-    public ScoreManager scoreManager;
     public bool thrown = false;
     private GameObject sides;
     private Rigidbody rb;
     private bool stopped = false;
+    private EventManager eventManager;
     
     void Start()
     {
@@ -26,10 +26,16 @@ public class DiceScore : Score
         }
     }
 
+    public void Init(EventManager _eventManager)
+    {
+        thrown = true;
+        eventManager = _eventManager;
+    }
+
     void Stop()
     {
         stopped = true;
-        scoreManager.DiceStopped(this);
+        eventManager.DiceStopped(this);
     }
 
     public override int GetResult()

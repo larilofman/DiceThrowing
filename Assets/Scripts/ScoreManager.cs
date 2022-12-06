@@ -17,24 +17,12 @@ public class ScoreManager : MonoBehaviour
     {
         diceThrower = GetComponent<DiceThrower>();
         eventManager = GetComponent<EventManager>();
+
     }
 
     public void ResetScore()
     {
         diceScores.Clear();
-    }
-
-    public void DiceStopped(DiceScore diceScore)
-    {
-        diceScores.Add(diceScore);
-
-        if (diceScores.Count >= diceThrower.floatingDice.Count + diceThrower.storedDice.Count)
-        {
-            CalculateScore();
-
-            Vector3 diceCenter = GetMeanVector();
-            camMover.ZoomToDice(diceCenter);
-        }
     }
 
     void CalculateScore()
@@ -63,28 +51,6 @@ public class ScoreManager : MonoBehaviour
     static int SortByType(DiceResult d1, DiceResult d2)
     {
         return d1.typeN.CompareTo(d2.typeN);
-    }
-
-    private Vector3 GetMeanVector()
-    {
-        List<Vector3> positions = new List<Vector3>();
-        foreach (DiceScore diceScore in diceScores)
-        {
-            positions.Add(diceScore.transform.position);
-        }
-        if (positions.Count == 0)
-        {
-            return Vector3.zero;
-        }
-
-        Vector3 meanVector = Vector3.zero;
-
-        foreach (Vector3 pos in positions)
-        {
-            meanVector += pos;
-        }
-
-        return (meanVector / positions.Count);
     }
 
     public void SetBonus(Bonus _bonus)

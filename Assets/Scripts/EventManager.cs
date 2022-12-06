@@ -9,7 +9,9 @@ public class EventManager : MonoBehaviour
     public UnityEvent EventThrowPressed;
     public UnityEvent EventSetupOpened;
     public UnityEvent EventSetupAccepted;
-    public UnityEvent EventAllDiceStopped;
+    public UnityEvent<DiceScore> EventDiceStopped;
+    public UnityEvent<List<DiceScore>> EventAllDiceStopped;
+    public UnityEvent<List<DiceAdjust>, List<BonusAdjust>> EventAdjustsSpawned;
 
     public void Ready()
     {
@@ -30,8 +32,18 @@ public class EventManager : MonoBehaviour
         EventSetupAccepted.Invoke();
     }
 
-    public void AllDiceStopped()
+    public void DiceStopped(DiceScore diceScore)
     {
-        EventAllDiceStopped.Invoke();
+        EventDiceStopped.Invoke(diceScore);
+    }
+
+    public void AllDiceStopped(List<DiceScore> dices)
+    {
+        EventAllDiceStopped.Invoke(dices);
+    }
+
+    public void AdjustsSpawned(List<DiceAdjust> diceAdjusts, List<BonusAdjust> bonusAdjusts)
+    {
+        EventAdjustsSpawned.Invoke(diceAdjusts, bonusAdjusts);
     }
 }

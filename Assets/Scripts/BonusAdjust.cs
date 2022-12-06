@@ -22,12 +22,11 @@ public class BonusAdjust : Adjust
     //    amountField.onValueChanged.AddListener(delegate (string value) { TrimValue(value); });
     //}
 
-    public override void Init(string diceName, int amountDice, GameObject prefab = null)
+    public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
-        base.Init(diceName, amountDice, prefab);
-        dicePrefab = null;
+        base.Init(prefab, amount, _eventManager);
+        nameField.text = "Bonus";
         amountField.characterValidation = TMP_InputField.CharacterValidation.Integer;
-        Debug.Log("???");
     }
 
     protected override void TrimValue(string value)

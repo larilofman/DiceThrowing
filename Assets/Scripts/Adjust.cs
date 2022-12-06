@@ -12,18 +12,20 @@ abstract public class Adjust : MonoBehaviour
     public GameObject dicePrefab;
     public Button minusButton;
     public Button plusButton;
-    public virtual void Init(string diceName, int amountDice, GameObject prefab = null)
+    private EventManager eventManager;
+    public virtual void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
         nameField = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         amountField = transform.GetChild(1).GetComponent<TMP_InputField>();
-        nameField.text = diceName;
 
-        SetAmount(amountDice);
+        SetAmount(amount);
 
         minusButton = transform.GetChild(2).GetComponent<Button>();
         plusButton = transform.GetChild(3).GetComponent<Button>();
         minusButton.onClick.AddListener(Decrease);
         plusButton.onClick.AddListener(Increase);
+
+        eventManager = _eventManager;
 
         amountField.onValueChanged.AddListener(delegate (string value) { TrimValue(value); });
     }
