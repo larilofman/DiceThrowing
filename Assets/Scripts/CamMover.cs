@@ -9,7 +9,6 @@ public class CamMover : MonoBehaviour
     public float moveDuration;
     public UIManager uiManager;
     public DiceSetup diceSetup;
-    public ScoreManager scoreManager;
     public DiceThrower diceThrower;
     public EventManager eventManager;
     private Vector3 originalPos;
@@ -23,9 +22,8 @@ public class CamMover : MonoBehaviour
         eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
     }
 
-    void AllDiceStoppedEventHandler(List<DiceScore> dices)
+    void AllDiceStoppedEventHandler(List<DiceScore> dices, List<BonusAdjust> bonuses)
     {
-        Debug.Log(dices);
         Vector3 zoomSpot = GetMeanVector(dices);
         ZoomToDice(zoomSpot);
     }
@@ -65,8 +63,6 @@ public class CamMover : MonoBehaviour
 
             yield return null;
         }
-
-        diceThrower.StoreDice();
     }
 
     private IEnumerator ResetCamera(float smoothTime)
@@ -102,12 +98,6 @@ public class CamMover : MonoBehaviour
         uiManager.ShowScore(true);
         yield return new WaitForSeconds(delay);
         uiManager.ShowThrow();
-        scoreManager.ResetScore();
-        if (resetScore)
-        {
-            uiManager.ClearScore();
-            diceThrower.ClearTable();
-        }
         diceSetup.PrepareDice();
     }
 

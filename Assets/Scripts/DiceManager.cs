@@ -9,9 +9,9 @@ public class DiceManager : MonoBehaviour
     public List<DiceAdjust> diceAdjusts;
     public List<BonusAdjust> bonusAdjusts;
     public List<GameObject> activeDice;
+    public List<DiceScore> stoppedDices = new List<DiceScore>();
     private EventManager eventManager;
     private List<Vector3> positions = new List<Vector3>();
-    private List<DiceScore> stoppedDices = new List<DiceScore>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -32,7 +32,7 @@ public class DiceManager : MonoBehaviour
 
         if (stoppedDices.Count >= activeDice.Count)
         {
-            eventManager.AllDiceStopped(stoppedDices);
+            eventManager.AllDiceStopped(stoppedDices, bonusAdjusts);
             //CalculateScore();
 
             //Vector3 diceCenter = GetMeanVector();
@@ -77,7 +77,7 @@ public class DiceManager : MonoBehaviour
             for (int i = 0; i < diceAdjust.GetAmount(); i++)
             {
                 Vector3 spawnPos = transform.position + GetPosition();
-                GameObject instantiatedDice = Instantiate(diceAdjust.dicePrefab, spawnPos, Quaternion.identity);
+                GameObject instantiatedDice = Instantiate(diceAdjust.dicePrefab, spawnPos, Quaternion.identity, activeDiceParent);
                 activeDice.Add(instantiatedDice);
             }
         }

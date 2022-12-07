@@ -13,9 +13,6 @@ public class UIManager : MonoBehaviour
     public GameObject rethrowPanel;
     public GameObject setupPanel;
     public TextMeshProUGUI scoreTitle;
-    public TextMeshProUGUI scoreTextPrefab;
-    public RectTransform scoreTextParent;
-    public TextMeshProUGUI totalScoreText;
     int totalScore;
     // Start is called before the first frame update
     void Awake()
@@ -54,53 +51,16 @@ public class UIManager : MonoBehaviour
         rethrowPanel.gameObject.SetActive(false);
     }
 
-    public void ClearScore()
-    {
-        totalScore = 0;
+    //public void ClearScore()
+    //{
+    //    totalScore = 0;
 
-        foreach (Transform child in scoreTextParent)
-        {
-            Destroy(child.gameObject);
-        }
-    }
+    //    foreach (Transform child in scoreTextParent)
+    //    {
+    //        Destroy(child.gameObject);
+    //    }
+    //}
 
-    public void InsertScore(List<DiceResult> diceResults, Bonus bonus)
-    {
-        Dictionary<string, int> diceAmounts = new Dictionary<string, int>();
-
-        foreach (DiceResult diceResult in diceResults)
-        {
-            totalScore += diceResult.result;
-            string result = diceResult.result.ToString();
-            string paddedResult = result.PadRight(5 - result.Length);
-            TextMeshProUGUI scoreText = Instantiate(scoreTextPrefab, scoreTextParent);
-            scoreText.text = $"<b>{paddedResult}</b> ({diceResult.type})";
-
-            if (diceAmounts.ContainsKey(diceResult.type))
-            {
-                diceAmounts[diceResult.type] = diceAmounts[diceResult.type] + 1;
-            }
-            else
-            {
-                diceAmounts.Add(diceResult.type, 1);
-            }
-            
-        }
-        int bonusAmount = bonus.GetResult();
-        if(bonusAmount != 0)
-        {
-            totalScore += bonusAmount;
-            string bonusString = bonusAmount.ToString();
-            string paddedBonus = bonusString.PadRight(5 - bonusString.Length);
-            TextMeshProUGUI bonusText = Instantiate(scoreTextPrefab, scoreTextParent);
-            bonusText.text = $"<b>{paddedBonus}</b> (Bonus)";          
-        }
-
-        UpdateTitle(diceAmounts, bonusAmount);
-
-        totalScoreText.text = $"Total: <b>{totalScore}</b>";
-
-    }
     public void ShowScore(bool hideOthers=false)
     {
         if (hideOthers)

@@ -1016,7 +1016,6 @@ GameObject:
   m_Component:
   - component: {fileID: 554707011}
   - component: {fileID: 554707012}
-  - component: {fileID: 554707013}
   - component: {fileID: 554707014}
   - component: {fileID: 554707015}
   - component: {fileID: 554707016}
@@ -1056,24 +1055,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 963194227}
   throwingForce: 800
-  floatingDice: []
-  storedDice: []
-  floatingBonus: {fileID: 0}
-  bonusPrefab: {fileID: 5465778896954000379, guid: c2583a721c5b85c4aa5386d46a886354, type: 3}
---- !u!114 &554707013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554707010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f9ef63c12819d428a7995e1c37dc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiManager: {fileID: 1278744523}
-  camMover: {fileID: 963194229}
 --- !u!114 &554707014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1138,7 +1119,13 @@ MonoBehaviour:
   EventSetupAccepted:
     m_PersistentCalls:
       m_Calls: []
+  EventDiceStopped:
+    m_PersistentCalls:
+      m_Calls: []
   EventAllDiceStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  EventAdjustsSpawned:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &554707016
@@ -1154,7 +1141,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeDiceParent: {fileID: 525200146}
+  diceAdjusts: []
+  bonusAdjusts: []
   activeDice: []
+  stoppedDices: []
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1597,6 @@ MonoBehaviour:
   moveDuration: 2
   uiManager: {fileID: 1278744523}
   diceSetup: {fileID: 554707014}
-  scoreManager: {fileID: 554707013}
   diceThrower: {fileID: 554707012}
   eventManager: {fileID: 554707015}
 --- !u!1 &1004553263
@@ -2421,6 +2410,7 @@ GameObject:
   - component: {fileID: 1278744520}
   - component: {fileID: 1278744519}
   - component: {fileID: 1278744523}
+  - component: {fileID: 1278744524}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -2531,8 +2521,21 @@ MonoBehaviour:
   rethrowPanel: {fileID: 1036642039}
   setupPanel: {fileID: 230453972}
   scoreTitle: {fileID: 1284677573}
-  scoreTextPrefab: {fileID: 8615468895643069245, guid: cbb1da916a9484542998f26e00cdc474, type: 3}
+--- !u!114 &1278744524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278744518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f9ef63c12819d428a7995e1c37dc47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventManager: {fileID: 554707015}
   scoreTextParent: {fileID: 1168826837}
+  scoreTextPrefab: {fileID: 8615468895643069245, guid: cbb1da916a9484542998f26e00cdc474, type: 3}
   totalScoreText: {fileID: 807844474}
 --- !u!114 &1284677573 stripped
 MonoBehaviour:

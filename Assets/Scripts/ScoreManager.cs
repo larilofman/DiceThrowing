@@ -1,51 +1,51 @@
-using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
-
 
 public class ScoreManager : MonoBehaviour
 {
-    public UIManager uiManager;
-    public CamMover camMover;
-    private DiceThrower diceThrower;
-    private EventManager eventManager;
-    private List<DiceScore> diceScores = new List<DiceScore>();
-    private Bonus bonus;
+    public EventManager eventManager;
+    public RectTransform scoreTextParent;
+    public TextMeshProUGUI scoreTextPrefab;
+    public TextMeshProUGUI totalScoreText;
+    private Dictionary<string, int> currentScores = new Dictionary<string, int>();
+    private int totalScore = 0;
 
     void Start()
     {
-        diceThrower = GetComponent<DiceThrower>();
-        eventManager = GetComponent<EventManager>();
-
+        eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
     }
 
-    public void ResetScore()
+    void AllDiceStoppedEventHandler(List<DiceScore> diceScores, List<BonusAdjust> bonuses)
     {
-        diceScores.Clear();
+        CalculateScore(diceScores, bonuses);
+        InsertScore();
     }
 
-    void CalculateScore()
+    void CalculateScore(List<DiceScore> diceScores, List<BonusAdjust> bonuses)
     {
-        List<DiceResult> diceResults = new List<DiceResult>();
+        List<DiceResult> results = new List<DiceResult>();
         foreach (DiceScore diceScore in diceScores)
         {
             string diceName = diceScore.gameObject.name.Split("(")[0];
             int score = diceScore.GetResult();
-            diceResults.Add(new DiceResult(score, diceName));
-            
+            results.Add(new DiceResult(score, diceName));
+
         }
 
-        diceResults.Sort(SortByType);
+        results.Sort(SortByType);
 
-        //string scoreString = "";
-        //foreach (DiceResult diceResult in diceResults)
-        //{
-        //    string result = diceResult.result.ToString();
-        //    string paddedResult = result.PadRight(5 - result.Length);
-        //    scoreString += $"<b>{paddedResult}</b> ({diceResult.type})\n";
-        //}
-        uiManager.InsertScore(diceResults, bonus);
+        foreach (DiceResult diceResult in results)
+        {
+            currentScores.Add(diceResult.type, diceResult.result);
+        }
+
+        foreach (BonusAdjust bonus in bonuses)
+        {
+            string name = bonus.displayName;
+            int amount = bonus.GetAmount();
+            currentScores.Add(name, amount);
+        }
     }
 
     static int SortByType(DiceResult d1, DiceResult d2)
@@ -53,8 +53,41 @@ public class ScoreManager : MonoBehaviour
         return d1.typeN.CompareTo(d2.typeN);
     }
 
-    public void SetBonus(Bonus _bonus)
+    public void InsertScore()
     {
-        bonus = _bonus;
+        //Dictionary<string, int> diceAmounts = new Dictionary<string, int>();
+
+        foreach (KeyValuePair<string, int> entry in currentScores)
+        {
+            totalScore += entry.Value;
+            string result = entry.Value.ToString();
+            string paddedResult = result.PadRight(5 - result.Length);
+            TextMeshProUGUI scoreText = Instantiate(scoreTextPrefab, scoreTextParent);
+            scoreText.text = $"<b>{paddedResult}</b> ({entry.Key})";
+
+            //if (diceAmounts.ContainsKey(diceResult.type))
+            //{
+            //    diceAmounts[diceResult.type] = diceAmounts[diceResult.type] + 1;
+            //}
+            //else
+            //{
+            //    diceAmounts.Add(diceResult.type, 1);
+            //}
+
+        }
+        //int bonusAmount = bonus.GetResult();
+        //if (bonusAmount != 0)
+        //{
+        //    totalScore += bonusAmount;
+        //    string bonusString = bonusAmount.ToString();
+        //    string paddedBonus = bonusString.PadRight(5 - bonusString.Length);
+        //    TextMeshProUGUI bonusText = Instantiate(scoreTextPrefab, scoreTextParent);
+        //    bonusText.text = $"<b>{paddedBonus}</b> (Bonus)";
+        //}
+
+        //UpdateTitle(diceAmounts, bonusAmount);
+
+        totalScoreText.text = $"Total: <b>{totalScore}</b>";
+
     }
 }

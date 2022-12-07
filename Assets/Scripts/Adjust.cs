@@ -44,7 +44,6 @@ abstract public class Adjust : MonoBehaviour
     {
         int newAmount = GetAmount() - 1;
         SetAmount(newAmount);
-        Debug.Log(amountField.characterValidation);
     }
 
     public abstract void SetAmount(int amount);
