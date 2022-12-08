@@ -6,9 +6,9 @@ public class ScoreManager : MonoBehaviour
 {
     public EventManager eventManager;
     public RectTransform scoreTextParent;
-    public TextMeshProUGUI scoreTextPrefab;
+    public GameObject scoreTextPrefab;
     public TextMeshProUGUI totalScoreText;
-    private Dictionary<string, int> currentScores = new Dictionary<string, int>();
+    private List<DiceResult> currentScores = new List<DiceResult>();
     private int totalScore = 0;
 
     void Start()
@@ -37,14 +37,14 @@ public class ScoreManager : MonoBehaviour
 
         foreach (DiceResult diceResult in results)
         {
-            currentScores.Add(diceResult.type, diceResult.result);
+            currentScores.Add(new DiceResult(diceResult.result, diceResult.type));
         }
 
         foreach (BonusAdjust bonus in bonuses)
         {
             string name = bonus.displayName;
             int amount = bonus.GetAmount();
-            currentScores.Add(name, amount);
+            currentScores.Add(new DiceResult(amount, name, false));
         }
     }
 
@@ -55,39 +55,19 @@ public class ScoreManager : MonoBehaviour
 
     public void InsertScore()
     {
-        //Dictionary<string, int> diceAmounts = new Dictionary<string, int>();
-
-        foreach (KeyValuePair<string, int> entry in currentScores)
+        foreach (DiceResult diceResult in currentScores)
         {
-            totalScore += entry.Value;
-            string result = entry.Value.ToString();
-            string paddedResult = result.PadRight(5 - result.Length);
-            TextMeshProUGUI scoreText = Instantiate(scoreTextPrefab, scoreTextParent);
-            scoreText.text = $"<b>{paddedResult}</b> ({entry.Key})";
+            totalScore += diceResult.result;
 
-            //if (diceAmounts.ContainsKey(diceResult.type))
-            //{
-            //    diceAmounts[diceResult.type] = diceAmounts[diceResult.type] + 1;
-            //}
-            //else
-            //{
-            //    diceAmounts.Add(diceResult.type, 1);
-            //}
+            GameObject scoreTextObject = Instantiate(scoreTextPrefab, scoreTextParent);
 
+            TextMeshProUGUI scoreText = scoreTextObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            scoreText.text = diceResult.result.ToString();
+
+            TextMeshProUGUI typeText = scoreTextObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+            typeText.text = $"({diceResult.type})";
         }
-        //int bonusAmount = bonus.GetResult();
-        //if (bonusAmount != 0)
-        //{
-        //    totalScore += bonusAmount;
-        //    string bonusString = bonusAmount.ToString();
-        //    string paddedBonus = bonusString.PadRight(5 - bonusString.Length);
-        //    TextMeshProUGUI bonusText = Instantiate(scoreTextPrefab, scoreTextParent);
-        //    bonusText.text = $"<b>{paddedBonus}</b> (Bonus)";
-        //}
-
-        //UpdateTitle(diceAmounts, bonusAmount);
-
-        totalScoreText.text = $"Total: <b>{totalScore}</b>";
+        totalScoreText.text = $"Total: {totalScore}";
 
     }
 }

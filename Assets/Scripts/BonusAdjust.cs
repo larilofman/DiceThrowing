@@ -49,8 +49,12 @@ public class BonusAdjust : Adjust
         }
     }
 
-    public override void SetAmount(int value)
+    public override void SetAmount(int value, bool invokeChange=true)
     {
         amountField.text = value.ToString();
+        if (invokeChange)
+        {
+            OnAmountChanged();
+        }
     }
 }

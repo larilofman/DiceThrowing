@@ -18,14 +18,13 @@ abstract public class Adjust : MonoBehaviour
         nameField = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         amountField = transform.GetChild(1).GetComponent<TMP_InputField>();
 
-        SetAmount(amount);
+        eventManager = _eventManager;
+        SetAmount(amount, false);
 
         minusButton = transform.GetChild(2).GetComponent<Button>();
         plusButton = transform.GetChild(3).GetComponent<Button>();
         minusButton.onClick.AddListener(Decrease);
         plusButton.onClick.AddListener(Increase);
-
-        eventManager = _eventManager;
 
         amountField.onValueChanged.AddListener(delegate (string value) { TrimValue(value); });
     }
@@ -46,7 +45,12 @@ abstract public class Adjust : MonoBehaviour
         SetAmount(newAmount);
     }
 
-    public abstract void SetAmount(int amount);
+    protected void OnAmountChanged()
+    {
+        eventManager.AdjustsChanged();
+    }
+
+    public abstract void SetAmount(int amount, bool invokeChange=true);
 
     protected abstract void TrimValue(string value);
 }

@@ -9,10 +9,17 @@ public struct DiceResult
     public string type;
     public int typeN;
 
-    public DiceResult(int result, string type)
+    public DiceResult(int result, string type, bool sortable=true)
     {
         this.result = result;
         this.type = type;
-        this.typeN = int.Parse(Regex.Replace(type, "[^0-9]", ""));
+        if (sortable)
+        {
+            this.typeN = int.Parse(Regex.Replace(type, "[^0-9]", ""));
+        } else
+        {
+            this.typeN = 0;
+        }
+
     }
 }

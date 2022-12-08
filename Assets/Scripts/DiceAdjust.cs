@@ -33,7 +33,7 @@ public class DiceAdjust : Adjust
         //}
     }
 
-    public override void SetAmount(int value)
+    public override void SetAmount(int value, bool invokeChange=true)
     {
         if (value < 0)
         {
@@ -41,5 +41,9 @@ public class DiceAdjust : Adjust
         }
 
         amountField.text = value.ToString();
+        if (invokeChange)
+        {
+            OnAmountChanged();
+        }
     }
 }
