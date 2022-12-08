@@ -232,7 +232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dac42e93301e9f43aeedda5a75d677c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrown: 0
 --- !u!114 &6277702140812445888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,11 +273,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0, g: 0.6666667, b: 0, a: 0}
-  - {r: 0, g: 0, b: 1, a: 0}
-  - {r: 0, g: 0.33333334, b: 0.33333334, a: 0}
-  - {r: 0.33333334, g: 0, b: 0.33333334, a: 0}
-  - {r: 0.33333334, g: 0.33333334, b: 0, a: 0}
+  - {r: 0, g: 0.6666667, b: 0, a: 1}
+  - {r: 0.21568628, g: 0.21568628, b: 1, a: 1}
+  - {r: 0, g: 0.33333334, b: 0.33333334, a: 1}
+  - {r: 0.33333334, g: 0.09803922, b: 0.33333334, a: 1}
+  - {r: 0.33333334, g: 0.33333334, b: 0.09803922, a: 1}
 --- !u!1001 &6277702142070526888
 PrefabInstance:
   m_ObjectHideFlags: 0

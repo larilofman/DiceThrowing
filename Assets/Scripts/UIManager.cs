@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class UIManager : MonoBehaviour
     public GameObject throwPanel;
     public GameObject rethrowPanel;
     public GameObject setupPanel;
+    public Button AcceptSetupButton;
+    private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
     {
@@ -21,6 +24,8 @@ public class UIManager : MonoBehaviour
         eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
         eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
         eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
+        eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
+        eventManager.EventAdjustsChanged.AddListener(AdjustsChangedEventHandler);
     }
 
     void DiceThrownEventHandler()
@@ -56,6 +61,28 @@ public class UIManager : MonoBehaviour
     void ThrowMorePressedEventHandler()
     {
         StartCoroutine(ThrowMore());
+    }
+
+    void AdjustsSpawnedEventHandler(List<DiceAdjust> _diceAdjusts, List<BonusAdjust> _bonusAdjusts)
+    {
+        diceAdjusts = _diceAdjusts;
+    }
+
+    void AdjustsChangedEventHandler()
+    {
+        int totalDice = 0;
+        foreach (DiceAdjust diceAdjust in diceAdjusts)
+        {
+            totalDice += diceAdjust.GetAmount();
+        }
+
+        if(totalDice > 0)
+        {
+            AcceptSetupButton.interactable = true;
+        } else
+        {
+            AcceptSetupButton.interactable = false;
+        }
     }
 
     public void HideUI()

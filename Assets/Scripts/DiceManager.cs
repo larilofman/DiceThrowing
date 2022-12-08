@@ -70,7 +70,10 @@ public class DiceManager : MonoBehaviour
         }
         activeDice.Clear();
         stoppedDices.Clear();
+    }
 
+    void ClearStoredDice()
+    {
         foreach (GameObject dice in storedDice)
         {
             Destroy(dice);
@@ -93,6 +96,7 @@ public class DiceManager : MonoBehaviour
         float delay = GlobalSettings.Instance.zoomOutTime;
         yield return new WaitForSeconds(delay);
         ClearActiveDice();
+        ClearStoredDice();
         SpawnDice(diceAdjusts);
     }
     private IEnumerator SpawnMoreDice()
