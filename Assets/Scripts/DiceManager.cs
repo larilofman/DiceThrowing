@@ -9,6 +9,7 @@ public class DiceManager : MonoBehaviour
     public List<DiceAdjust> diceAdjusts;
     public List<BonusAdjust> bonusAdjusts;
     public List<GameObject> activeDice;
+    public List<GameObject> storedDice;
     public List<DiceScore> stoppedDices = new List<DiceScore>();
     private EventManager eventManager;
     private List<Vector3> positions = new List<Vector3>();
@@ -19,6 +20,8 @@ public class DiceManager : MonoBehaviour
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventSetupAccepted.AddListener(SetupAcceptedEventHandler);
         eventManager.EventDiceStopped.AddListener(DiceStoppedEventHandler);
+        eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
+        eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
     }
 
     void Start()
@@ -33,10 +36,6 @@ public class DiceManager : MonoBehaviour
         if (stoppedDices.Count >= activeDice.Count)
         {
             eventManager.AllDiceStopped(stoppedDices, bonusAdjusts);
-            //CalculateScore();
-
-            //Vector3 diceCenter = GetMeanVector();
-            //camMover.ZoomToDice(diceCenter);
         }
     }
 
@@ -53,6 +52,16 @@ public class DiceManager : MonoBehaviour
         SpawnDice(diceAdjusts);
     }
 
+    void ThrowAgainPressedEventHandler()
+    {
+        StartCoroutine(SpawnNewDice());
+    }
+
+    void ThrowMorePressedEventHandler()
+    {
+        StartCoroutine(SpawnMoreDice());
+    }
+
     void ClearActiveDice()
     {
         foreach (GameObject dice in activeDice)
@@ -60,6 +69,38 @@ public class DiceManager : MonoBehaviour
             Destroy(dice);
         }
         activeDice.Clear();
+        stoppedDices.Clear();
+
+        foreach (GameObject dice in storedDice)
+        {
+            Destroy(dice);
+        }
+        storedDice.Clear();
+    }
+
+    void StoreDice()
+    {
+        foreach (GameObject dice in activeDice)
+        {
+            storedDice.Add(dice);
+        }
+        activeDice.Clear();
+        stoppedDices.Clear();
+    }
+
+    private IEnumerator SpawnNewDice()
+    {
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        yield return new WaitForSeconds(delay);
+        ClearActiveDice();
+        SpawnDice(diceAdjusts);
+    }
+    private IEnumerator SpawnMoreDice()
+    {
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        yield return new WaitForSeconds(delay);
+        StoreDice();
+        SpawnDice(diceAdjusts);
     }
 
     public void SpawnDice(List<DiceAdjust> diceAdjusts)
@@ -81,12 +122,6 @@ public class DiceManager : MonoBehaviour
                 activeDice.Add(instantiatedDice);
             }
         }
-
-        //GameObject instantiatedBonus = Instantiate(bonusPrefab);
-        //Bonus bonus = instantiatedBonus.GetComponent<Bonus>();
-        //bonus.Init(bonusAdjust.GetAmount());
-        //floatingBonus = instantiatedBonus;
-        //scoreManager.SetBonus(bonus);
     }
 
     Vector3 GetPosition()

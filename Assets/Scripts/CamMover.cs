@@ -6,7 +6,6 @@ using static UnityEngine.GraphicsBuffer;
 public class CamMover : MonoBehaviour
 {
     public Vector3 offSet;
-    public float moveDuration;
     public UIManager uiManager;
     public DiceSetup diceSetup;
     public DiceThrower diceThrower;
@@ -20,6 +19,8 @@ public class CamMover : MonoBehaviour
         originalPos = transform.position;
         originalRot = transform.rotation;
         eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
+        eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
+        eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
     }
 
     void AllDiceStoppedEventHandler(List<DiceScore> dices, List<BonusAdjust> bonuses)
@@ -28,19 +29,30 @@ public class CamMover : MonoBehaviour
         ZoomToDice(zoomSpot);
     }
 
-    public void ZoomToDice(Vector3 targetPos)
+    void ThrowAgainPressedEventHandler()
     {
-        float smoothTime = moveDuration;
-        StartCoroutine(Zoom(targetPos, smoothTime));
-        StartCoroutine(ShowScore(smoothTime));
+        float smoothTime = GlobalSettings.Instance.zoomOutTime;
+        StartCoroutine(ResetCamera(smoothTime));
     }
 
-    public void Reset(bool resetScore)
+    void ThrowMorePressedEventHandler()
     {
-        float smoothTime = moveDuration * 0.50f;
+        float smoothTime = GlobalSettings.Instance.zoomOutTime;
         StartCoroutine(ResetCamera(smoothTime));
-        StartCoroutine(ResetThrow(smoothTime * 1.25f, resetScore));
     }
+
+    public void ZoomToDice(Vector3 targetPos)
+    {
+        float smoothTime = GlobalSettings.Instance.zoomInTime;
+        StartCoroutine(Zoom(targetPos, smoothTime));
+    }
+
+    //public void Reset(bool resetScore)
+    //{
+    //    float smoothTime = GlobalSettings.Instance.zoomOutTime;
+    //    StartCoroutine(ResetCamera(smoothTime));
+    //    StartCoroutine(ResetThrow(smoothTime * 1.25f, resetScore));
+    //}
 
     private IEnumerator Zoom(Vector3 targetPos, float smoothTime)
     {
@@ -86,19 +98,11 @@ public class CamMover : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowScore(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        uiManager.ShowScore();
-        uiManager.ShowRethrow();
-    }
-
     private IEnumerator ResetThrow(float delay, bool resetScore)
     {
         uiManager.ShowScore(true);
         yield return new WaitForSeconds(delay);
         uiManager.ShowThrow();
-        diceSetup.PrepareDice();
     }
 
     private Vector3 GetMeanVector(List<DiceScore> diceScores)

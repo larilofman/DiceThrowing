@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
         eventManager.EventThrowPressed.AddListener(DiceThrownEventHandler);
         eventManager.EventSetupOpened.AddListener(SetupOpenedEventHandler);
         eventManager.EventSetupAccepted.AddListener(SetupAcceptedEventHandler);
+        eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
+        eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
+        eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
     }
 
     void DiceThrownEventHandler()
@@ -40,12 +43,27 @@ public class UIManager : MonoBehaviour
         ShowThrow();
     }
 
+    void AllDiceStoppedEventHandler(List<DiceScore> dummy1, List<BonusAdjust> dummy2)
+    {
+        StartCoroutine(ThrowFinished());
+    }
+
+    void ThrowAgainPressedEventHandler()
+    {
+        StartCoroutine(ThrowAgain());
+    }
+
+    void ThrowMorePressedEventHandler()
+    {
+        StartCoroutine(ThrowMore());
+    }
+
     public void HideUI()
     {
-        throwPanel.gameObject.SetActive(false);
-        scorePanel.gameObject.SetActive(false);
-        setupPanel.gameObject.SetActive(false);
-        rethrowPanel.gameObject.SetActive(false);
+        throwPanel.SetActive(false);
+        scorePanel.SetActive(false);
+        setupPanel.SetActive(false);
+        rethrowPanel.SetActive(false);
     }
 
     public void ShowScore(bool hideOthers=false)
@@ -54,23 +72,47 @@ public class UIManager : MonoBehaviour
         {
             HideUI();
         }
-        scorePanel.gameObject.SetActive(true);       
+        scorePanel.SetActive(true);       
     }
 
     public void ShowRethrow()
     {
-        rethrowPanel.gameObject.SetActive(true);
+        rethrowPanel.SetActive(true);
     }
 
     public void ShowSetup()
     {
         HideUI();
-        setupPanel.gameObject.SetActive(true);
+        setupPanel.SetActive(true);
     }
 
     public void ShowThrow()
     {
         HideUI();
-        throwPanel.gameObject.SetActive(true);
+        throwPanel.SetActive(true);
+    }
+
+    private IEnumerator ThrowFinished()
+    {
+        float delay = GlobalSettings.Instance.zoomInTime;
+        yield return new WaitForSeconds(delay);
+        ShowScore();
+        ShowRethrow();
+    }
+
+    private IEnumerator ThrowAgain()
+    {
+        ShowScore(true);
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        yield return new WaitForSeconds(delay);
+        ShowThrow();
+    }
+
+    private IEnumerator ThrowMore()
+    {
+        ShowScore(true);
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        yield return new WaitForSeconds(delay);
+        ShowThrow();
     }
 }
