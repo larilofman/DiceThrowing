@@ -22,6 +22,6 @@ public class DiceColor : MonoBehaviour
     void SetRandomColor()
     {
         int index = Random.Range(0, colors.Count);
-        diceRenderer.material.SetColor("_Color", colors[index]);
+        diceRenderer.material.color = colors[index];
     }
 }
