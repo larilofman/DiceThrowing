@@ -129,6 +129,6 @@ public class ScoreManager : MonoBehaviour
         }
 
         TextMeshProUGUI scoreText = scoreTextObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        scoreText.text = $"Throw {throwNum}:";
+        scoreText.text = $"<u>Throw {throwNum}:</u>";
     }
 }

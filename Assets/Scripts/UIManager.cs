@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     public GameObject rethrowPanel;
     public GameObject setupPanel;
     public Button AcceptSetupButton;
+    public GameObject scoreDetailsPanel;
+    public GameObject creditsPanel;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -91,6 +93,8 @@ public class UIManager : MonoBehaviour
         scorePanel.SetActive(false);
         setupPanel.SetActive(false);
         rethrowPanel.SetActive(false);
+        scoreDetailsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
     }
 
     public void ShowScore(bool hideOthers=false)
@@ -117,6 +121,21 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         throwPanel.SetActive(true);
+    }
+
+    public void ToggleScoreDetails()
+    {
+        scoreDetailsPanel.SetActive(!scoreDetailsPanel.activeSelf);
+    }
+
+    public void ShowCredits()
+    {
+        creditsPanel.SetActive(true);
+    }
+
+    public void HideCredits()
+    {
+        creditsPanel.SetActive(false);
     }
 
     private IEnumerator ThrowFinished()
