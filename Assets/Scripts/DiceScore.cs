@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class DiceScore : MonoBehaviour
 {
-    [System.NonSerialized] // Added by DiceThrower upon instantiating dice
+    [System.NonSerialized]
     public bool thrown = false;
-    private GameObject sides;
-    private Rigidbody rb;
-    private bool stopped = false;
-    private EventManager eventManager;
+    protected GameObject sides;
+    protected Rigidbody rb;
+    protected bool stopped = false;
+    protected EventManager eventManager;
     
     void Start()
     {
@@ -26,19 +26,33 @@ public class DiceScore : MonoBehaviour
         }
     }
 
-    public void Init(EventManager _eventManager)
+    public virtual void Init(EventManager _eventManager)
     {
-        thrown = true;
         eventManager = _eventManager;
     }
 
-    void Stop()
+    public virtual void Throw(float throwingForce, Vector3 throwDirection)
+    {
+        thrown = true;
+
+        rb.constraints = RigidbodyConstraints.None;
+
+        rb.useGravity = true;
+        rb.AddForce(throwDirection * throwingForce);
+        Vector3 throwTorque = new(
+            Random.Range(-30, 30),
+            Random.Range(-30, 30),
+            Random.Range(-30, 30));
+        rb.AddTorque(throwTorque, ForceMode.Impulse);
+    }
+
+    protected virtual void Stop()
     {
         stopped = true;
         eventManager.DiceStopped(this);
     }
 
-    public int GetResult()
+    public virtual int GetResult()
     {
         GameObject highestSide = sides.transform.GetChild(0).gameObject;
         foreach (Transform child in sides.transform)

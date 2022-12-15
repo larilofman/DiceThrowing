@@ -10,6 +10,9 @@ public class SmoothRotation : MonoBehaviour
     float minAngle = 15f;
 
     private float speed = 0f;
+    private float startX = 0f;
+    private float startY = 0f;
+    private float startZ = 0f;
     private float RotAngleX = 0;
     private float RotAngleY = 0;
     private float RotAngleZ = 0;
@@ -19,9 +22,12 @@ public class SmoothRotation : MonoBehaviour
     {
         diceScore = GetComponent<DiceScore>();
         speed = Random.Range(minSpeed, maxSpeed);
-        RotAngleX = Random.Range(minAngle, maxAngle);
-        RotAngleY = Random.Range(minAngle, maxAngle);
-        RotAngleZ = Random.Range(minAngle, maxAngle);
+        startX = Random.Range(-180, 180);
+        startY = Random.Range(-180, 180);
+        startZ = Random.Range(-180, 180);
+        RotAngleX = startX + Random.Range(minAngle, maxAngle);
+        RotAngleY = startY + Random.Range(minAngle, maxAngle);
+        RotAngleZ = startZ + Random.Range(minAngle, maxAngle);
     }
 
     void Update()
@@ -31,9 +37,9 @@ public class SmoothRotation : MonoBehaviour
             Destroy(this);
         }
 
-        float rX = Mathf.SmoothStep(0, RotAngleX, Mathf.PingPong(Time.time * speed, 1));
-        float rY = Mathf.SmoothStep(0, RotAngleY, Mathf.PingPong(Time.time * speed, 1));
-        float rZ = Mathf.SmoothStep(0, RotAngleZ, Mathf.PingPong(Time.time * speed, 1));
+        float rX = Mathf.SmoothStep(startX, RotAngleX, Mathf.PingPong(Time.time * speed, 1));
+        float rY = Mathf.SmoothStep(startY, RotAngleY, Mathf.PingPong(Time.time * speed, 1));
+        float rZ = Mathf.SmoothStep(startZ, RotAngleZ, Mathf.PingPong(Time.time * speed, 1));
         transform.rotation = Quaternion.Euler(rX, rY, rZ);
     }
 }

@@ -12,10 +12,13 @@ public class DiceManager : MonoBehaviour
     public List<GameObject> storedDice;
     public List<DiceScore> stoppedDices = new List<DiceScore>();
     private EventManager eventManager;
-    private List<Vector3> positions = new List<Vector3>();
+    private List<Vector3> allPositions = new List<Vector3>();
+    private List<Vector3> availablePositions = new List<Vector3>();
+    private int spawnSpots = 300;
     // Start is called before the first frame update
     void Awake()
     {
+        allPositions = CreatePositions(spawnSpots);
         eventManager = GetComponent<EventManager>();
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventSetupAccepted.AddListener(SetupAcceptedEventHandler);
@@ -113,9 +116,15 @@ public class DiceManager : MonoBehaviour
         foreach (Adjust diceAdjust in diceAdjusts)
         {
             totalDice += diceAdjust.GetAmount();
+
+            // D100 (and possibly other non-normal dice that use more than one visible dice)
+            if (diceAdjust.dicePrefab.name.Length > 3)
+            {
+                totalDice += diceAdjust.GetAmount();
+            }
         }
 
-        positions = CreatePositions(totalDice);
+        availablePositions = allPositions.GetRange(0, totalDice);
 
         foreach (Adjust diceAdjust in diceAdjusts)
         {
@@ -124,15 +133,29 @@ public class DiceManager : MonoBehaviour
                 Vector3 spawnPos = transform.position + GetPosition();
                 GameObject instantiatedDice = Instantiate(diceAdjust.dicePrefab, spawnPos, Quaternion.identity, activeDiceParent);
                 activeDice.Add(instantiatedDice);
+
+                DiceScore diceScore = instantiatedDice.GetComponent<DiceScore>();
+                diceScore.Init(eventManager);
+
+                // D100 (and possibly other non-normal dice that use more than one visible dice)
+                if (diceAdjust.dicePrefab.name.Length > 3 && diceAdjust.dicePrefab.name == "D100")
+                {
+                    D100Score d100Score = instantiatedDice.GetComponent<D100Score>();
+                    GameObject childDicePrefab = d100Score.childDicePrefab;
+
+                    spawnPos = transform.position + GetPosition();
+                    GameObject instantiatedChildDice = Instantiate(childDicePrefab, spawnPos, Quaternion.identity, activeDiceParent);
+                    d100Score.InitChild(instantiatedChildDice);
+                }
             }
         }
     }
 
     Vector3 GetPosition()
     {
-        int index = Random.Range(0, positions.Count);
-        Vector3 pos = positions[index];
-        positions.RemoveAt(index);
+        int index = Random.Range(0, availablePositions.Count);
+        Vector3 pos = availablePositions[index];
+        availablePositions.RemoveAt(index);
         return pos;
     }
 

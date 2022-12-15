@@ -35,23 +35,8 @@ public class DiceThrower : MonoBehaviour
     {
         foreach (GameObject dice in diceManager.activeDice)
         {
-            Rigidbody diceRb = dice.GetComponent<Rigidbody>();
-            diceRb.constraints = RigidbodyConstraints.None;
             DiceScore diceScore = dice.GetComponent<DiceScore>();
-            diceScore.Init(eventManager);
-            ThrowDice(diceRb);
+            diceScore.Throw(throwingForce, cam.transform.forward);
         }
-    }
-
-    void ThrowDice(Rigidbody diceRb)
-    {
-        diceRb.useGravity = true;
-        Vector3 throwDirection = cam.transform.forward;
-        diceRb.AddForce(throwDirection * throwingForce);
-        Vector3 throwTorque = new(
-            Random.Range(-30, 30),
-            Random.Range(-30, 30),
-            Random.Range(-30, 30));
-        diceRb.AddTorque(throwTorque, ForceMode.Impulse);
     }
 }
