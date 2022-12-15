@@ -28,17 +28,18 @@ public class ScoreManager : MonoBehaviour
 
     void ThrowAgainPressedEventHandler()
     {
-        StartCoroutine(ClearScore());
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        StartCoroutine(ClearScore(delay));
     }
 
     void ThrowMorePressedEventHandler()
     {
-        StartCoroutine(StoreScore());
+        float delay = GlobalSettings.Instance.zoomOutTime;
+        StartCoroutine(StoreScore(delay));
     }
 
-    IEnumerator ClearScore()
+    IEnumerator ClearScore(float delay)
     {
-        float delay = GlobalSettings.Instance.zoomOutTime;
         yield return new WaitForSeconds(delay);
 
         totalScore = 0;
@@ -50,9 +51,8 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    IEnumerator StoreScore()
+    IEnumerator StoreScore(float delay)
     {
-        float delay = GlobalSettings.Instance.zoomOutTime;
         yield return new WaitForSeconds(delay);
 
         if(throwNum == 1)

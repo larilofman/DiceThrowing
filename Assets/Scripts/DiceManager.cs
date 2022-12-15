@@ -42,6 +42,11 @@ public class DiceManager : MonoBehaviour
         }
     }
 
+    public void DEBUG_AllDiceStopped()
+    {
+        eventManager.AllDiceStopped(stoppedDices, bonusAdjusts);
+    }
+
     void AdjustsSpawnedEventHandler(List<DiceAdjust> _diceAdjusts, List<BonusAdjust> _bonusAdjusts)
     {
         diceAdjusts = _diceAdjusts;
