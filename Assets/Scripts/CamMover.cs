@@ -12,6 +12,9 @@ public class CamMover : MonoBehaviour
     public EventManager eventManager;
     private Vector3 originalPos;
     private Quaternion originalRot;
+    private List<Transform> diceLocations = new List<Transform>();
+    private int targetDiceIndex = 0;
+    private float stayOnDiceDuration = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,34 +28,46 @@ public class CamMover : MonoBehaviour
 
     void AllDiceStoppedEventHandler(List<DiceScore> dices, List<BonusAdjust> bonuses)
     {
-        Vector3 zoomSpot = GetMeanVector(dices);
-        ZoomToDice(zoomSpot);
+        diceLocations.Clear();
+        foreach (DiceScore dice in dices)
+        {
+            diceLocations.Add(dice.transform);
+        }
+        ZoomToDice();
     }
 
     void ThrowAgainPressedEventHandler()
     {
         float smoothTime = GlobalSettings.Instance.zoomOutTime;
+        StopAllCoroutines();
         StartCoroutine(ResetCamera(smoothTime));
     }
 
     void ThrowMorePressedEventHandler()
     {
         float smoothTime = GlobalSettings.Instance.zoomOutTime;
+        StopAllCoroutines();
         StartCoroutine(ResetCamera(smoothTime));
     }
 
-    public void ZoomToDice(Vector3 targetPos)
+    public void ZoomToDice()
     {
         float smoothTime = GlobalSettings.Instance.zoomInTime;
+        Vector3 targetPos = diceLocations[targetDiceIndex].position;
         StartCoroutine(Zoom(targetPos, smoothTime));
     }
 
-    //public void Reset(bool resetScore)
-    //{
-    //    float smoothTime = GlobalSettings.Instance.zoomOutTime;
-    //    StartCoroutine(ResetCamera(smoothTime));
-    //    StartCoroutine(ResetThrow(smoothTime * 1.25f, resetScore));
-    //}
+    private void NextDicePos()
+    {
+        if(targetDiceIndex >= diceLocations.Count - 1)
+        {
+             targetDiceIndex = 0;
+        }
+        else
+        {
+            targetDiceIndex++;
+        }
+    }
 
     private IEnumerator Zoom(Vector3 targetPos, float smoothTime)
     {
@@ -75,6 +90,9 @@ public class CamMover : MonoBehaviour
 
             yield return null;
         }
+        yield return new WaitForSeconds(stayOnDiceDuration);
+        NextDicePos();
+        ZoomToDice();
     }
 
     private IEnumerator ResetCamera(float smoothTime)
