@@ -7,12 +7,14 @@ using Unity.VisualScripting;
 
 public class DiceAdjust : Adjust
 {
+    public Toggle bonusToggle;
     public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
         base.Init(prefab, amount, _eventManager);
         dicePrefab = prefab;
         nameField.text = prefab.name;
         amountField.characterValidation = TMP_InputField.CharacterValidation.Digit;
+        bonusToggle = transform.GetChild(4).GetComponent<Toggle>();
     }
 
     protected override void TrimValue(string value)
@@ -45,5 +47,10 @@ public class DiceAdjust : Adjust
         {
             OnAmountChanged();
         }
+    }
+
+    public bool BonusActive()
+    {
+        return bonusToggle.isOn;
     }
 }

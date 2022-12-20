@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 3ef3548f89cca02449f1da679bb7e118
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -6384415949673249562
@@ -9,7 +9,12 @@ ModelImporter:
   - first:
       74: -2358463511864672729
     second: Cube|NopanHeilunta
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: c67333232a3f638448b64fdd475b512c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -105,6 +110,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

@@ -14,7 +14,6 @@ public class CamMover : MonoBehaviour
     private Quaternion originalRot;
     private List<Transform> diceLocations = new List<Transform>();
     private int targetDiceIndex = 0;
-    private float stayOnDiceDuration = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +31,13 @@ public class CamMover : MonoBehaviour
         foreach (DiceScore dice in dices)
         {
             diceLocations.Add(dice.transform);
+            if (dice.GetType() == typeof(D100Score))
+            {
+                D100Score d100Score = (D100Score)dice;
+                diceLocations.Add(d100Score.childDiceScore.transform);
+            }
         }
-        ZoomToDice();
+        ZoomToDice(GlobalSettings.Instance.zoomInTime);
     }
 
     void ThrowAgainPressedEventHandler()
@@ -50,9 +54,8 @@ public class CamMover : MonoBehaviour
         StartCoroutine(ResetCamera(smoothTime));
     }
 
-    public void ZoomToDice()
+    public void ZoomToDice(float smoothTime)
     {
-        float smoothTime = GlobalSettings.Instance.zoomInTime;
         Vector3 targetPos = diceLocations[targetDiceIndex].position;
         StartCoroutine(Zoom(targetPos, smoothTime));
     }
@@ -90,9 +93,9 @@ public class CamMover : MonoBehaviour
 
             yield return null;
         }
-        yield return new WaitForSeconds(stayOnDiceDuration);
+        yield return new WaitForSeconds(GlobalSettings.Instance.cameraStayOnDiceTime);
         NextDicePos();
-        ZoomToDice();
+        ZoomToDice(GlobalSettings.Instance.cameraMoveToNextDiceTime);
     }
 
     private IEnumerator ResetCamera(float smoothTime)

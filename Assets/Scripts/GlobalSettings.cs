@@ -9,7 +9,9 @@ public class GlobalSettings : MonoBehaviour
     public static GlobalSettings Instance { get { return _instance; } }
     public float zoomInTime;
     public float zoomOutTime;
-
+    public float cameraStayOnDiceTime;
+    public float cameraMoveToNextDiceTime;
+    public float bonusDiceVanishTime;
 
     private void Awake()
     {

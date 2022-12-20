@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,7 @@ public class DiceManager : MonoBehaviour
     private List<Vector3> allPositions = new List<Vector3>();
     private List<Vector3> availablePositions = new List<Vector3>();
     private int spawnSpots = 300;
+    private List<List<DiceScore>> bonusDiceGroups = new List<List<DiceScore>>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -38,8 +40,36 @@ public class DiceManager : MonoBehaviour
 
         if (stoppedDices.Count >= activeDice.Count)
         {
+            if(bonusDiceGroups.Count > 0)
+            {
+                StartCoroutine(RemoveLowest());
+            }
+
             eventManager.AllDiceStopped(stoppedDices, bonusAdjusts);
         }
+    }
+
+    IEnumerator RemoveLowest()
+    {
+        foreach (List<DiceScore> group in bonusDiceGroups)
+        {
+            DiceScore lowestScore = null;
+            foreach (DiceScore dice in group)
+            {
+                if (!lowestScore)
+                {
+                    lowestScore = dice;
+                } else if(dice.GetResult() < lowestScore.GetResult()) {
+                    lowestScore = dice;
+                }
+            }
+            Debug.Log(lowestScore.GetResult());
+            stoppedDices.Remove(lowestScore);
+            activeDice.Remove(lowestScore.gameObject);
+            lowestScore.AddComponent<DiceFader>();
+        }
+        bonusDiceGroups.Clear();
+        yield return GlobalSettings.Instance.bonusDiceVanishTime;
     }
 
     public void DEBUG_AllDiceStopped()
@@ -133,6 +163,18 @@ public class DiceManager : MonoBehaviour
 
         foreach (Adjust diceAdjust in diceAdjusts)
         {
+            List<DiceScore> diceGroup = new List<DiceScore>();
+            bool bonusActive = false;
+            if(diceAdjust.GetType() == typeof(DiceAdjust))
+            {
+                DiceAdjust diceAdj = (DiceAdjust)diceAdjust;
+                bonusActive = diceAdj.BonusActive();
+                if (bonusActive)
+                {
+                    bonusDiceGroups.Add(diceGroup);
+                }      
+            }
+
             for (int i = 0; i < diceAdjust.GetAmount(); i++)
             {
                 Vector3 spawnPos = transform.position + GetPosition();
@@ -141,6 +183,11 @@ public class DiceManager : MonoBehaviour
 
                 DiceScore diceScore = instantiatedDice.GetComponent<DiceScore>();
                 diceScore.Init(eventManager);
+
+                if (bonusActive)
+                {
+                    diceGroup.Add(diceScore);
+                }
 
                 // D100 (and possibly other non-normal dice that use more than one visible dice)
                 if (diceAdjust.dicePrefab.name.Length > 3 && diceAdjust.dicePrefab.name == "D100")
