@@ -17,6 +17,7 @@ public class DiceManager : MonoBehaviour
     private List<Vector3> availablePositions = new List<Vector3>();
     private int spawnSpots = 300;
     private List<List<DiceScore>> bonusDiceGroups = new List<List<DiceScore>>();
+    public List<DiceScore> diceToFade = new List<DiceScore>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -40,8 +41,9 @@ public class DiceManager : MonoBehaviour
 
         if (stoppedDices.Count >= activeDice.Count)
         {
-            if(bonusDiceGroups.Count > 0)
+            if (bonusDiceGroups.Count > 0)
             {
+                FindLowests();
                 StartCoroutine(RemoveLowest());
             }
 
@@ -49,8 +51,9 @@ public class DiceManager : MonoBehaviour
         }
     }
 
-    IEnumerator RemoveLowest()
+    private void FindLowests()
     {
+        Debug.Log("bonusdicegroups: " + bonusDiceGroups.Count);
         foreach (List<DiceScore> group in bonusDiceGroups)
         {
             DiceScore lowestScore = null;
@@ -59,16 +62,46 @@ public class DiceManager : MonoBehaviour
                 if (!lowestScore)
                 {
                     lowestScore = dice;
-                } else if(dice.GetResult() < lowestScore.GetResult()) {
+                }
+                else if (dice.GetResult() < lowestScore.GetResult())
+                {
                     lowestScore = dice;
                 }
             }
-            Debug.Log(lowestScore.GetResult());
-            stoppedDices.Remove(lowestScore);
-            activeDice.Remove(lowestScore.gameObject);
-            lowestScore.AddComponent<DiceFader>();
+            diceToFade.Add(lowestScore);
+        }   
+    }
+
+    IEnumerator RemoveLowest()
+    {
+        //foreach (List<DiceScore> group in bonusDiceGroups)
+        //{
+        //    DiceScore lowestScore = null;
+        //    foreach (DiceScore dice in group)
+        //    {
+        //        if (!lowestScore)
+        //        {
+        //            lowestScore = dice;
+        //        } else if(dice.GetResult() < lowestScore.GetResult()) {
+        //            lowestScore = dice;
+        //        }
+        //    }
+        //    Debug.Log(lowestScore.GetResult());
+        //    stoppedDices.Remove(lowestScore);
+        //    activeDice.Remove(lowestScore.gameObject);
+        //    lowestScore.AddComponent<DiceFader>();
+        //}
+
+        foreach (DiceScore dice in diceToFade)
+        {
+            if(dice != null)
+            {
+                stoppedDices.Remove(dice);
+                activeDice.Remove(dice.gameObject);
+                dice.AddComponent<DiceFader>();
+            }
         }
-        bonusDiceGroups.Clear();
+
         yield return GlobalSettings.Instance.bonusDiceVanishTime;
     }
 
@@ -119,6 +152,12 @@ public class DiceManager : MonoBehaviour
         storedDice.Clear();
     }
 
+    void ClearFades()
+    {
+        diceToFade.Clear();
+        bonusDiceGroups.Clear();
+    }
+
     void StoreDice()
     {
         foreach (GameObject dice in activeDice)
@@ -135,6 +174,7 @@ public class DiceManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         ClearActiveDice();
         ClearStoredDice();
+        ClearFades();
         SpawnDice(diceAdjusts);
     }
     private IEnumerator SpawnMoreDice()
@@ -142,6 +182,7 @@ public class DiceManager : MonoBehaviour
         float delay = GlobalSettings.Instance.zoomOutTime;
         yield return new WaitForSeconds(delay);
         StoreDice();
+        ClearFades();
         SpawnDice(diceAdjusts);
     }
 

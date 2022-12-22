@@ -1843,6 +1843,7 @@ MonoBehaviour:
   activeDice: []
   storedDice: []
   stoppedDices: []
+  diceToFade: []
 --- !u!4 &654724314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a342f1b0edb8c054ca2ac8fd03d1c228, type: 3}
@@ -5717,7 +5718,9 @@ MonoBehaviour:
   zoomOutTime: 1
   cameraStayOnDiceTime: 1
   cameraMoveToNextDiceTime: 1.25
-  bonusDiceVanishTime: 1
+  bonusDiceVanishTime: 1.5
+  diceOpaqueMaterial: {fileID: 2100000, guid: c8b36fc32dd7c454ab5cda250317aca8, type: 2}
+  diceTransparentMaterial: {fileID: 2100000, guid: f674fa0a31ef107428ffb789d7e1130a, type: 2}
 --- !u!1001 &1823078916
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class GlobalSettings : MonoBehaviour
     public float cameraStayOnDiceTime;
     public float cameraMoveToNextDiceTime;
     public float bonusDiceVanishTime;
+    public Material diceOpaqueMaterial;
+    public Material diceTransparentMaterial;
 
     private void Awake()
     {

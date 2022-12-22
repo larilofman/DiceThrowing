@@ -13,7 +13,7 @@ public class CamMover : MonoBehaviour
     private Vector3 originalPos;
     private Quaternion originalRot;
     private List<Transform> diceLocations = new List<Transform>();
-    private int targetDiceIndex = 0;
+    public int targetDiceIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +28,7 @@ public class CamMover : MonoBehaviour
     void AllDiceStoppedEventHandler(List<DiceScore> dices, List<BonusAdjust> bonuses)
     {
         diceLocations.Clear();
+        targetDiceIndex = 0;
         foreach (DiceScore dice in dices)
         {
             diceLocations.Add(dice.transform);
