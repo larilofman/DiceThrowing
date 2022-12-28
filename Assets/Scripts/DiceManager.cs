@@ -17,7 +17,7 @@ public class DiceManager : MonoBehaviour
     private List<Vector3> availablePositions = new List<Vector3>();
     private int spawnSpots = 300;
     private List<List<DiceScore>> bonusDiceGroups = new List<List<DiceScore>>();
-    public List<DiceScore> diceToFade = new List<DiceScore>();
+    private List<DiceScore> diceToFade = new List<DiceScore>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -102,6 +102,8 @@ public class DiceManager : MonoBehaviour
             }
         }
 
+        ClearFades();
+
         yield return GlobalSettings.Instance.bonusDiceVanishTime;
     }
 
@@ -174,7 +176,6 @@ public class DiceManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         ClearActiveDice();
         ClearStoredDice();
-        ClearFades();
         SpawnDice(diceAdjusts);
     }
     private IEnumerator SpawnMoreDice()
@@ -182,7 +183,6 @@ public class DiceManager : MonoBehaviour
         float delay = GlobalSettings.Instance.zoomOutTime;
         yield return new WaitForSeconds(delay);
         StoreDice();
-        ClearFades();
         SpawnDice(diceAdjusts);
     }
 

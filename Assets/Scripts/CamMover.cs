@@ -14,6 +14,7 @@ public class CamMover : MonoBehaviour
     private Quaternion originalRot;
     private List<Transform> diceLocations = new List<Transform>();
     public int targetDiceIndex = 0;
+    public Vector3 targetPos;
 
     // Start is called before the first frame update
     void Start()
@@ -32,18 +33,34 @@ public class CamMover : MonoBehaviour
         foreach (DiceScore dice in dices)
         {
             diceLocations.Add(dice.transform);
+
+            // In case of a D100, add the child dice too
             if (dice.GetType() == typeof(D100Score))
             {
                 D100Score d100Score = (D100Score)dice;
                 diceLocations.Add(d100Score.childDiceScore.transform);
             }
         }
+
+        // Sort by distance
+        diceLocations.Sort(delegate (Transform diceA, Transform diceB)
+        {
+        return Vector3.Distance(transform.position, diceA.position)
+        .CompareTo(Vector3.Distance(transform.position, diceB.position));
+        });
+
         ZoomToDice(GlobalSettings.Instance.zoomInTime);
+    }
+
+    void ResetTargetPos()
+    {
+        targetPos = Vector3.zero;
     }
 
     void ThrowAgainPressedEventHandler()
     {
         float smoothTime = GlobalSettings.Instance.zoomOutTime;
+        ResetTargetPos();
         StopAllCoroutines();
         StartCoroutine(ResetCamera(smoothTime));
     }
@@ -51,13 +68,14 @@ public class CamMover : MonoBehaviour
     void ThrowMorePressedEventHandler()
     {
         float smoothTime = GlobalSettings.Instance.zoomOutTime;
+        ResetTargetPos();
         StopAllCoroutines();
         StartCoroutine(ResetCamera(smoothTime));
     }
 
     public void ZoomToDice(float smoothTime)
     {
-        Vector3 targetPos = diceLocations[targetDiceIndex].position;
+        targetPos = diceLocations[targetDiceIndex].position;
         StartCoroutine(Zoom(targetPos, smoothTime));
     }
 

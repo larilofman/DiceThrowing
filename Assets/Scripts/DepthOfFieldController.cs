@@ -9,6 +9,7 @@ public class DepthOfFieldController : MonoBehaviour
     public VolumeProfile volumeProfile;
     public DepthOfField depthOfField;
     public DiceManager diceManager;
+    public CamMover camMover;
     float smoothSpeed = 5f;
 
     float distance;
@@ -17,13 +18,24 @@ public class DepthOfFieldController : MonoBehaviour
     {
         if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
         if (!volumeProfile.TryGet(out depthOfField)) throw new System.NullReferenceException(nameof(depthOfField));
+
+        camMover = GetComponent<CamMover>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 diceMean = GetDiceMean();
-        distance = Vector3.Distance(transform.position, diceMean);
+        Vector3 targetPos = Vector3.zero;
+
+        if (camMover.targetPos != Vector3.zero)
+        {
+            targetPos = camMover.targetPos;
+        }
+        else
+        {
+            targetPos = GetDiceMean();
+        }
+        distance = Vector3.Distance(transform.position, targetPos);
         float targetStart = distance + 10f;
         float targetEnd = distance + 30f;
 

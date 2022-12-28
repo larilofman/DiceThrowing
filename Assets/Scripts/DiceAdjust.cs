@@ -10,11 +10,11 @@ public class DiceAdjust : Adjust
     public Toggle bonusToggle;
     public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
+        bonusToggle = transform.GetChild(4).GetComponent<Toggle>();
         base.Init(prefab, amount, _eventManager);
         dicePrefab = prefab;
         nameField.text = prefab.name;
-        amountField.characterValidation = TMP_InputField.CharacterValidation.Digit;
-        bonusToggle = transform.GetChild(4).GetComponent<Toggle>();
+        amountField.characterValidation = TMP_InputField.CharacterValidation.Digit;       
     }
 
     protected override void TrimValue(string value)
@@ -42,6 +42,16 @@ public class DiceAdjust : Adjust
             value = 0;
         }
 
+        if (value > 1)
+        {
+            bonusToggle.interactable = true;
+        }
+        else
+        {
+            bonusToggle.interactable = false;
+            bonusToggle.isOn = false;
+        }
+
         amountField.text = value.ToString();
         if (invokeChange)
         {
@@ -51,6 +61,10 @@ public class DiceAdjust : Adjust
 
     public bool BonusActive()
     {
+        if (!bonusToggle.interactable)
+        {
+            return false;
+        }
         return bonusToggle.isOn;
     }
 }
