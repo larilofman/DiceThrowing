@@ -39,7 +39,13 @@ public class TitleManager : MonoBehaviour
             int amount = diceAdjust.GetAmount();
             if (amount > 0)
             {
-                dices.Add($"{amount}{diceAdjust.dicePrefab.name}");
+                string bonusText = "";
+                if (diceAdjust.BonusActive())
+                {
+                    amount -= 1;
+                    bonusText = "(Bonus)";
+                }
+                dices.Add($"{amount}{diceAdjust.dicePrefab.name}{bonusText}");
             }
         }
 

@@ -11,6 +11,7 @@ public class DiceAdjust : Adjust
     public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
         bonusToggle = transform.GetChild(4).GetComponent<Toggle>();
+        bonusToggle.onValueChanged.AddListener(value =>  OnBonusToggled(value));
         base.Init(prefab, amount, _eventManager);
         dicePrefab = prefab;
         nameField.text = prefab.name;
@@ -66,5 +67,10 @@ public class DiceAdjust : Adjust
             return false;
         }
         return bonusToggle.isOn;
+    }
+
+    private void OnBonusToggled(bool selected)
+    {
+        OnAmountChanged();
     }
 }
