@@ -44,6 +44,10 @@ public class TitleManager : MonoBehaviour
                 {
                     amount -= 1;
                     bonusText = "(Bonus)";
+                } else if (diceAdjust.PenaltyActive())
+                {
+                    amount -= 1;
+                    bonusText = "(Penalty)";
                 }
                 dices.Add($"{amount}{diceAdjust.dicePrefab.name}{bonusText}");
             }

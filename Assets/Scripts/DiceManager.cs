@@ -15,13 +15,13 @@ public class DiceManager : MonoBehaviour
     private EventManager eventManager;
     private List<Vector3> allPositions = new List<Vector3>();
     private List<Vector3> availablePositions = new List<Vector3>();
-    private int spawnSpots = 300;
     private List<List<DiceScore>> bonusDiceGroups = new List<List<DiceScore>>();
+    private List<List<DiceScore>> penaltyDiceGroups = new List<List<DiceScore>>();
     private List<DiceScore> diceToFade = new List<DiceScore>();
     // Start is called before the first frame update
     void Awake()
     {
-        allPositions = CreatePositions(spawnSpots);
+        allPositions = CreatePositions(GlobalSettings.Instance.maxDice);
         eventManager = GetComponent<EventManager>();
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventSetupAccepted.AddListener(SetupAcceptedEventHandler);
@@ -44,8 +44,13 @@ public class DiceManager : MonoBehaviour
             if (bonusDiceGroups.Count > 0)
             {
                 FindLowests();
-                StartCoroutine(RemoveLowest());
+
             }
+            if(penaltyDiceGroups.Count > 0)
+            {
+                FindHighests();
+            }
+            StartCoroutine(RemoveLowest());
 
             eventManager.AllDiceStopped(stoppedDices, bonusAdjusts);
         }
@@ -53,7 +58,6 @@ public class DiceManager : MonoBehaviour
 
     private void FindLowests()
     {
-        Debug.Log("bonusdicegroups: " + bonusDiceGroups.Count);
         foreach (List<DiceScore> group in bonusDiceGroups)
         {
             DiceScore lowestScore = null;
@@ -72,26 +76,28 @@ public class DiceManager : MonoBehaviour
         }   
     }
 
+    private void FindHighests()
+    {
+        foreach (List<DiceScore> group in penaltyDiceGroups)
+        {
+            DiceScore highestScore = null;
+            foreach (DiceScore dice in group)
+            {
+                if (!highestScore)
+                {
+                    highestScore = dice;
+                }
+                else if (dice.GetResult() > highestScore.GetResult())
+                {
+                    highestScore = dice;
+                }
+            }
+            diceToFade.Add(highestScore);
+        }
+    }
+
     IEnumerator RemoveLowest()
     {
-        //foreach (List<DiceScore> group in bonusDiceGroups)
-        //{
-        //    DiceScore lowestScore = null;
-        //    foreach (DiceScore dice in group)
-        //    {
-        //        if (!lowestScore)
-        //        {
-        //            lowestScore = dice;
-        //        } else if(dice.GetResult() < lowestScore.GetResult()) {
-        //            lowestScore = dice;
-        //        }
-        //    }
-        //    Debug.Log(lowestScore.GetResult());
-        //    stoppedDices.Remove(lowestScore);
-        //    activeDice.Remove(lowestScore.gameObject);
-        //    lowestScore.AddComponent<DiceFader>();
-        //}
-
         foreach (DiceScore dice in diceToFade)
         {
             if(dice != null)
@@ -206,14 +212,19 @@ public class DiceManager : MonoBehaviour
         {
             List<DiceScore> diceGroup = new List<DiceScore>();
             bool bonusActive = false;
+            bool penaltyActive = false;
             if(diceAdjust.GetType() == typeof(DiceAdjust))
             {
                 DiceAdjust diceAdj = (DiceAdjust)diceAdjust;
                 bonusActive = diceAdj.BonusActive();
+                penaltyActive = diceAdj.PenaltyActive();
                 if (bonusActive)
                 {
                     bonusDiceGroups.Add(diceGroup);
-                }      
+                } else if (penaltyActive)
+                {
+                    penaltyDiceGroups.Add(diceGroup);
+                }
             }
 
             for (int i = 0; i < diceAdjust.GetAmount(); i++)
@@ -225,7 +236,7 @@ public class DiceManager : MonoBehaviour
                 DiceScore diceScore = instantiatedDice.GetComponent<DiceScore>();
                 diceScore.Init(eventManager);
 
-                if (bonusActive)
+                if (bonusActive || penaltyActive)
                 {
                     diceGroup.Add(diceScore);
                 }

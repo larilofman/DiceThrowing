@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class UIManager : MonoBehaviour
     public Button AcceptSetupButton;
     public GameObject scoreDetailsPanel;
     public GameObject creditsPanel;
+    public GameObject worldChangePanel;
+    public TMP_Text warningText;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -76,14 +79,26 @@ public class UIManager : MonoBehaviour
         foreach (DiceAdjust diceAdjust in diceAdjusts)
         {
             totalDice += diceAdjust.GetAmount();
+            if(diceAdjust.dicePrefab.name == "D100")
+            {
+                totalDice += diceAdjust.GetAmount();
+            }
         }
 
-        if(totalDice > 0)
-        {
-            AcceptSetupButton.interactable = true;
-        } else
+        if(totalDice <= 0)
         {
             AcceptSetupButton.interactable = false;
+            warningText.text = "Add at least one dice.";
+            warningText.gameObject.SetActive(true);
+        } else if(totalDice > GlobalSettings.Instance.maxDice)
+        {
+            AcceptSetupButton.interactable = false;
+            warningText.text = "Maximum amount of dice is 300.\n D100 counts as two.";
+            warningText.gameObject.SetActive(true);
+        } else
+        {
+            warningText.gameObject.SetActive(false);
+            AcceptSetupButton.interactable = true;
         }
     }
 
@@ -95,6 +110,7 @@ public class UIManager : MonoBehaviour
         rethrowPanel.SetActive(false);
         scoreDetailsPanel.SetActive(false);
         creditsPanel.SetActive(false);
+        worldChangePanel.SetActive(false);
     }
 
     public void ShowScore(bool hideOthers=false)
@@ -121,6 +137,7 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         throwPanel.SetActive(true);
+        worldChangePanel.SetActive(true);
     }
 
     public void ToggleScoreDetails()

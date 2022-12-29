@@ -8,10 +8,13 @@ using Unity.VisualScripting;
 public class DiceAdjust : Adjust
 {
     public Toggle bonusToggle;
+    public Toggle penaltyToggle;
     public override void Init(GameObject prefab, int amount, EventManager _eventManager)
     {
         bonusToggle = transform.GetChild(4).GetComponent<Toggle>();
         bonusToggle.onValueChanged.AddListener(value =>  OnBonusToggled(value));
+        penaltyToggle = transform.GetChild(5).GetComponent<Toggle>();
+        penaltyToggle.onValueChanged.AddListener(value => OnPenaltyToggled(value));
         base.Init(prefab, amount, _eventManager);
         dicePrefab = prefab;
         nameField.text = prefab.name;
@@ -30,6 +33,8 @@ public class DiceAdjust : Adjust
             amountField.text = value.Substring(1);
         }
 
+        SetAmount(int.Parse(amountField.text), true);
+
         //if(diceSetup.TotalDiceSetup() < 1)
         //{
         //    amountField.text = "1";
@@ -46,11 +51,14 @@ public class DiceAdjust : Adjust
         if (value > 1)
         {
             bonusToggle.interactable = true;
+            penaltyToggle.interactable = true;
         }
         else
         {
             bonusToggle.interactable = false;
             bonusToggle.isOn = false;
+            penaltyToggle.interactable = false;
+            penaltyToggle.isOn = false;
         }
 
         amountField.text = value.ToString();
@@ -69,8 +77,30 @@ public class DiceAdjust : Adjust
         return bonusToggle.isOn;
     }
 
+    public bool PenaltyActive()
+    {
+        if (!penaltyToggle.interactable)
+        {
+            return false;
+        }
+        return penaltyToggle.isOn;
+    }
+
     private void OnBonusToggled(bool selected)
     {
+        if (selected)
+        {
+            penaltyToggle.isOn = false;
+        }
+        OnAmountChanged();
+    }
+
+    private void OnPenaltyToggled(bool selected)
+    {
+        if (selected)
+        {
+            bonusToggle.isOn = false;
+        }
         OnAmountChanged();
     }
 }
