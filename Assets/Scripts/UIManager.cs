@@ -93,7 +93,7 @@ public class UIManager : MonoBehaviour
         } else if(totalDice > GlobalSettings.Instance.maxDice)
         {
             AcceptSetupButton.interactable = false;
-            warningText.text = "Maximum amount of dice is 300.\n D100 counts as two.";
+            warningText.text = $"Maximum amount of dice is {GlobalSettings.Instance.maxDice}.\n D100 counts as two.";
             warningText.gameObject.SetActive(true);
         } else
         {

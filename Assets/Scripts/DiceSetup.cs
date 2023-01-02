@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 
@@ -18,19 +19,20 @@ public class DiceSetup : MonoBehaviour
     public GameObject diceAdjustPrefab;
     public GameObject bonusAdjustPrefab;
     private EventManager eventManager;
+    private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
+    private List<BonusAdjust> bonusAdjusts = new List<BonusAdjust>();
+    private Dictionary<string, DiceAdjust> diceAdjustDict = new Dictionary<string, DiceAdjust>();
 
     // Start is called before the first frame update
     void Start()
     {
         eventManager = GetComponent<EventManager>();
+        eventManager.EventDiceRollSetupLoaded.AddListener(LoadDiceRollSetup);
         InitDiceAdjusts();
     }
 
     void InitDiceAdjusts()
     {
-        List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
-        List<BonusAdjust> bonusAdjusts = new List<BonusAdjust>();
-
         for (int i = 0; i < dicePrefabs.Count; i++)
         {
             GameObject diceAdjustObj = Instantiate(diceAdjustPrefab, adjustParent.transform);
@@ -50,6 +52,63 @@ public class DiceSetup : MonoBehaviour
         BonusAdjust bonusAdjust = bonusAdjustObj.GetComponent<BonusAdjust>();
         bonusAdjust.Init(null, 0, eventManager);
         bonusAdjusts.Add(bonusAdjust);
+
+        CreateDictionary();
+
         eventManager.AdjustsSpawned(diceAdjusts, bonusAdjusts);
+    }
+
+    void CreateDictionary()
+    {
+        foreach (DiceAdjust diceAdjust in diceAdjusts)
+        {
+            diceAdjustDict.Add(diceAdjust.dicePrefab.name, diceAdjust);
+        }
+    }
+
+    void LoadDiceRollSetup(DiceRollSetup diceRollSetup)
+    {
+        foreach (DiceAdjust diceAdjust in diceAdjusts)
+        {
+            diceAdjust.SetAmount(0);
+        }
+
+        foreach (BonusAdjust bonusAdjust in bonusAdjusts)
+        {
+            bonusAdjust.SetAmount(0);
+        }
+
+        for (int i = 0; i < diceRollSetup.diceNames.Count; i++)
+        {
+            string name = diceRollSetup.diceNames[i];
+            int amount = diceRollSetup.diceAmounts[i];
+            int bonusPenalty = diceRollSetup.diceBonusPenalties[i];
+            DiceAdjust diceAdjust = diceAdjustDict[name];
+            bool bonus = false;
+            bool penalty = false;
+            if (bonusPenalty > 0)
+            {
+                bonus = true;
+            }
+            else if (bonusPenalty < 0)
+            {
+                penalty = true;
+            }
+
+            diceAdjust.SetAmount(amount, true);
+
+            if (bonus)
+            {
+                diceAdjust.EnableBonus();
+            }
+            else if (penalty)
+            {
+                diceAdjust.EnablePenalty();
+            }
+        }
+
+        bonusAdjusts[0].SetAmount(diceRollSetup.bonus);
+
+        eventManager.AcceptSetup();
     }
 }

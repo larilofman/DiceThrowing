@@ -1,0 +1,16 @@
+{
+  "savedRolls": [
+    {
+      "diceNames": [ "D6", "D10" ],
+      "diceAmounts": [ 3, 2 ],
+      "diceBonusPenalties": [ -1, 1 ],
+      "bonus": 1
+    },
+    {
+      "diceNames": [ "D4" ],
+      "diceAmounts": [ 4 ],
+      "diceBonusPenalties": [ 0 ],
+      "bonus": 4
+    }
+  ]
+}

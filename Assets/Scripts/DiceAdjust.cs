@@ -86,6 +86,18 @@ public class DiceAdjust : Adjust
         return penaltyToggle.isOn;
     }
 
+    public void EnableBonus()
+    {
+        bonusToggle.isOn = true;
+        OnBonusToggled(true);
+    }
+
+    public void EnablePenalty()
+    {
+        penaltyToggle.isOn = true;
+        OnPenaltyToggled(true);
+    }
+
     private void OnBonusToggled(bool selected)
     {
         if (selected)
