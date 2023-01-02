@@ -13,6 +13,7 @@ public class DiceRollSaverLoader : MonoBehaviour
         eventManager = GetComponent<EventManager>();
 
         diceRollSetups = JsonUtility.FromJson<DiceRollSetups>(diceRollDefaults.text);
+        Debug.Log(JsonUtility.ToJson(diceRollSetups));
     }
 
     public void TestLoad()
@@ -43,6 +44,6 @@ public class DiceRollSaverLoader : MonoBehaviour
         //DiceRollSetup setup = new DiceRollSetup(diceNames, diceAmounts, diceBonusPenalties, bonus);
         //string json = JsonUtility.ToJson(setup);
         //Debug.Log(json);
-        eventManager.LoadDiceScoreSetup(diceRollSetups.savedRolls[0]);
+        eventManager.LoadDiceScoreSetup(diceRollSetups.savedRolls[1]);
     }
 }

@@ -77,31 +77,20 @@ public class DiceSetup : MonoBehaviour
         {
             bonusAdjust.SetAmount(0);
         }
-
-        for (int i = 0; i < diceRollSetup.diceNames.Count; i++)
+        foreach (DiceRollData dice in diceRollSetup.diceRollData)
         {
-            string name = diceRollSetup.diceNames[i];
-            int amount = diceRollSetup.diceAmounts[i];
-            int bonusPenalty = diceRollSetup.diceBonusPenalties[i];
+            string name = dice.name;
+            int amount = dice.amount;
+
             DiceAdjust diceAdjust = diceAdjustDict[name];
-            bool bonus = false;
-            bool penalty = false;
-            if (bonusPenalty > 0)
-            {
-                bonus = true;
-            }
-            else if (bonusPenalty < 0)
-            {
-                penalty = true;
-            }
 
             diceAdjust.SetAmount(amount, true);
 
-            if (bonus)
+            if (dice.bonus)
             {
                 diceAdjust.EnableBonus();
             }
-            else if (penalty)
+            else if (dice.penalty)
             {
                 diceAdjust.EnablePenalty();
             }

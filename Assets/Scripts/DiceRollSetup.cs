@@ -5,9 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class DiceRollSetup
 {
-    public List<string> diceNames;
-    public List<int> diceAmounts;
-    public List<int> diceBonusPenalties;
+    public List<DiceRollData> diceRollData;
     public int bonus;
 
     //public DiceRollSetup(List<string> diceNames, List<int> diceAmounts, List<int> diceBonusPenalties, int bonus)
@@ -17,4 +15,13 @@ public class DiceRollSetup
     //    this.diceBonusPenalties = diceBonusPenalties;
     //    this.bonus = bonus;
     //}
+}
+
+[System.Serializable]
+public class DiceRollData
+{
+    public string name;
+    public int amount;
+    public bool bonus;
+    public bool penalty;
 }

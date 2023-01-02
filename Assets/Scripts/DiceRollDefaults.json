@@ -1,16 +1,32 @@
 {
   "savedRolls": [
     {
-      "diceNames": [ "D6", "D10" ],
-      "diceAmounts": [ 3, 2 ],
-      "diceBonusPenalties": [ -1, 1 ],
-      "bonus": 1
+      "diceRollData": [
+        {
+          "name": "D6",
+          "amount": 3,
+          "bonus": false,
+          "penalty": false
+        }
+      ],
+      "bonus": 0
     },
     {
-      "diceNames": [ "D4" ],
-      "diceAmounts": [ 4 ],
-      "diceBonusPenalties": [ 0 ],
-      "bonus": 4
+      "diceRollData": [
+        {
+          "name": "D8",
+          "amount": 2,
+          "bonus": true,
+          "penalty": false
+        },
+        {
+          "name": "D10",
+          "amount": 2,
+          "bonus": false,
+          "penalty": true
+        }
+      ],
+      "bonus": 2
     }
   ]
 }
