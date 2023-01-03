@@ -7,6 +7,7 @@ public class DiceRollSetup
 {
     public List<DiceRollData> diceRollData;
     public int bonus;
+    public string name;
 
     //public DiceRollSetup(List<string> diceNames, List<int> diceAmounts, List<int> diceBonusPenalties, int bonus)
     //{

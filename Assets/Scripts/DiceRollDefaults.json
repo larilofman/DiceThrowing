@@ -9,7 +9,8 @@
           "penalty": false
         }
       ],
-      "bonus": 0
+      "bonus": 0,
+      "name": "3D6"
     },
     {
       "diceRollData": [
@@ -26,7 +27,8 @@
           "penalty": true
         }
       ],
-      "bonus": 2
+      "bonus": 2,
+      "name": "test"
     }
   ]
 }
