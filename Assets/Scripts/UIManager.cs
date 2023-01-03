@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
     public GameObject creditsPanel;
     public GameObject worldChangePanel;
     public TMP_Text warningText;
+    public GameObject setupAcceptButton;
+    public GameObject setupSaveButton;
+    public GameObject setupCancelButton;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -31,6 +34,7 @@ public class UIManager : MonoBehaviour
         eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventAdjustsChanged.AddListener(AdjustsChangedEventHandler);
+        eventManager.EventAddNewDiceRollSetupOpened.AddListener(AddNewDiceRollSetupHandler);
     }
 
     void DiceThrownEventHandler()
@@ -102,6 +106,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    void AddNewDiceRollSetupHandler()
+    {
+        ShowAddDiceRollSetup();
+    }
+
     public void HideUI()
     {
         throwPanel.SetActive(false);
@@ -130,6 +139,18 @@ public class UIManager : MonoBehaviour
     public void ShowSetup()
     {
         HideUI();
+        setupAcceptButton.SetActive(true);
+        setupSaveButton.SetActive(false);
+        setupCancelButton.SetActive(false);
+        setupPanel.SetActive(true);
+    }
+
+    void ShowAddDiceRollSetup()
+    {
+        HideUI();
+        setupAcceptButton.SetActive(false);
+        setupSaveButton.SetActive(true);
+        setupCancelButton.SetActive(true);
         setupPanel.SetActive(true);
     }
 

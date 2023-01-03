@@ -20,8 +20,15 @@ public class QuickSelect : MonoBehaviour
     private void SelectSetup(int index)
     {
         dropdown.SetValueWithoutNotify(-1);
-        DiceRollSetup selectedSetup = diceRollSetups.savedRolls[index];
-        eventManager.LoadDiceScoreSetup(selectedSetup);
+        if (index == diceRollSetups.savedRolls.Count)
+        {
+            eventManager.OpenAddNewDiceRollSetup();
+        } else
+        {         
+            DiceRollSetup selectedSetup = diceRollSetups.savedRolls[index];
+            eventManager.LoadDiceScoreSetup(selectedSetup);
+        }
+
     }
 
     private void BuildDropdown(DiceRollSetups _diceRollSetups)
@@ -36,6 +43,9 @@ public class QuickSelect : MonoBehaviour
             TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData(diceRollSetup.name);
             options.Add(optionData);
         }
+
+        TMP_Dropdown.OptionData addNewOption = new TMP_Dropdown.OptionData("        Add new");
+        options.Add(addNewOption);
 
         dropdown.AddOptions(options);
         dropdown.SetValueWithoutNotify(-1);

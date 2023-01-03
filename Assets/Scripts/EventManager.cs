@@ -17,6 +17,7 @@ public class EventManager : MonoBehaviour
     public UnityEvent EventThrowMorePressed;
     public UnityEvent<DiceRollSetups> EventDiceRollSetupsChanged;
     public UnityEvent<DiceRollSetup> EventDiceRollSetupLoaded;
+    public UnityEvent EventAddNewDiceRollSetupOpened;
 
     public void Ready()
     {
@@ -74,5 +75,10 @@ public class EventManager : MonoBehaviour
     public void LoadDiceScoreSetup(DiceRollSetup diceRollSetup)
     {
         EventDiceRollSetupLoaded.Invoke(diceRollSetup);
+    }
+
+    public void OpenAddNewDiceRollSetup()
+    {
+        EventAddNewDiceRollSetupOpened.Invoke();
     }
 }

@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class DiceRollSetups
 {
-    public DiceRollSetup[] savedRolls;
+    public List<DiceRollSetup> savedRolls;
 }
