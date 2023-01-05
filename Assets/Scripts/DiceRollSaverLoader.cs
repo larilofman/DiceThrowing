@@ -21,6 +21,7 @@ public class DiceRollSaverLoader : MonoBehaviour
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventListener);
         eventManager.EventTitleChanged.AddListener(UpdateSetupName);
         eventManager.EventAddNewDiceRollSetupOpened.AddListener(CacheDiceRollSetup);
+        eventManager.EventDiceRollSetupDeleted.AddListener(DeleteDiceRollSetup);
         LoadDiceRollSetups();
         //Debug.Log(JsonUtility.ToJson(diceRollSetups));
     }
@@ -44,6 +45,13 @@ public class DiceRollSaverLoader : MonoBehaviour
         diceRollSetup.name = newSetupNameField.text;
         diceRollSetups.savedRolls.Add(diceRollSetup);
 
+        eventManager.UpdateDiceRollSetups(diceRollSetups);
+    }
+
+    public void DeleteDiceRollSetup(int index)
+    {
+        Debug.Log("deleting: " + index);
+        diceRollSetups.savedRolls.RemoveAt(index);
         eventManager.UpdateDiceRollSetups(diceRollSetups);
     }
 

@@ -23,17 +23,30 @@ public class QuickSelect : MonoBehaviour, IPointerClickHandler
     {
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
-            DisableDeleteButtonFromAddNew();
+            SetupDeleteButtons();
         }
     }
 
-    private void DisableDeleteButtonFromAddNew()
+    private void SetupDeleteButtons()
     {
-        Transform dropdownList = transform.GetChild(4);
-        Transform content = dropdownList.GetChild(0).GetChild(0);
-        Transform lastChild = content.GetChild(content.childCount - 1);
-        Button lastDeleteButton = lastChild.GetComponentInChildren<Button>();
-        lastDeleteButton.gameObject.SetActive(false);
+        Button[] buttons = GetComponentsInChildren<Button>();
+
+        if (buttons.Length <= 0) return;
+
+        // remove delete button from the last item, from the "Add new" item
+        buttons[buttons.Length - 1].gameObject.SetActive(false);
+
+        for (int i = 0; i < buttons.Length - 1; i++)
+        {
+            int buttonIndex = i;
+            buttons[i].onClick.AddListener(delegate { OnDeleteButtonClick(buttonIndex); });
+        }
+        Debug.Log(buttons.Length);
+    }
+
+    private void OnDeleteButtonClick(int index)
+    {
+        eventManager.DeleteDiceRollSetup(index);
     }
 
     private void SelectSetup(int index)
@@ -52,6 +65,9 @@ public class QuickSelect : MonoBehaviour, IPointerClickHandler
 
     private void BuildDropdown(DiceRollSetups _diceRollSetups)
     {
+
+        dropdown.Hide();
+
         diceRollSetups = _diceRollSetups;
         dropdown.ClearOptions();
 
