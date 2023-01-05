@@ -15,6 +15,7 @@ public class GlobalSettings : MonoBehaviour
     public int maxDice;
     public Material diceOpaqueMaterial;
     public Material diceTransparentMaterial;
+    public bool isPortrait = false;
 
     private void Awake()
     {
@@ -25,6 +26,19 @@ public class GlobalSettings : MonoBehaviour
         else
         {
             _instance = this;
+        }
+
+        GetScreenRatio();
+    }
+
+    private void GetScreenRatio()
+    {
+        int screenWidth = Camera.main.pixelWidth;
+        int screenHeight = Camera.main.pixelHeight;
+
+        if (screenWidth < screenHeight)
+        {
+            isPortrait = true;
         }
     }
 }

@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class DiceRollSaverLoader : MonoBehaviour
 {
     public TextAsset diceRollDefaults;
+    public TMP_InputField newSetupNameField;
     EventManager eventManager;
     DiceRollSetups diceRollSetups;
     List<DiceAdjust> diceAdjusts;
     List<BonusAdjust> bonusAdjusts;
+    private string cachedTitle = "";
+    DiceRollSetup cachedSetup = null;
     // Start is called before the first frame update
     void Start()
     {
         eventManager = GetComponent<EventManager>();
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventListener);
+        eventManager.EventTitleChanged.AddListener(UpdateSetupName);
+        eventManager.EventAddNewDiceRollSetupOpened.AddListener(CacheDiceRollSetup);
         LoadDiceRollSetups();
         //Debug.Log(JsonUtility.ToJson(diceRollSetups));
     }
@@ -33,25 +39,50 @@ public class DiceRollSaverLoader : MonoBehaviour
 
     public void AddNewDiceRollSetup()
     {
-        Debug.Log(bonusAdjusts.Count);
+        DiceRollSetup diceRollSetup = CreateDiceRollSetup();
+
+        diceRollSetup.name = newSetupNameField.text;
+        diceRollSetups.savedRolls.Add(diceRollSetup);
+
+        eventManager.UpdateDiceRollSetups(diceRollSetups);
+    }
+
+    DiceRollSetup CreateDiceRollSetup()
+    {
         DiceRollSetup diceRollSetup = new DiceRollSetup();
         diceRollSetup.diceRollData = new List<DiceRollData>();
+
         foreach (DiceAdjust diceAdjust in diceAdjusts)
         {
-            if (diceAdjust.GetAmount() > 0)
-            {
-                DiceRollData diceRollData = new DiceRollData();
-                diceRollData.name = diceAdjust.dicePrefab.name;
-                diceRollData.amount = diceAdjust.GetAmount();
-                diceRollData.bonus = diceAdjust.BonusActive();
-                diceRollData.penalty = diceAdjust.PenaltyActive();
-                diceRollSetup.diceRollData.Add(diceRollData);
-            }
+
+            DiceRollData diceRollData = new DiceRollData();
+            diceRollData.name = diceAdjust.dicePrefab.name;
+            diceRollData.amount = diceAdjust.GetAmount();
+            diceRollData.bonus = diceAdjust.BonusActive();
+            diceRollData.penalty = diceAdjust.PenaltyActive();
+            diceRollSetup.diceRollData.Add(diceRollData);
+
         }
 
         diceRollSetup.bonus = bonusAdjusts[0].GetAmount();
-        diceRollSetup.name = "testausta";
-        diceRollSetups.savedRolls.Add(diceRollSetup);
-        eventManager.UpdateDiceRollSetups(diceRollSetups);
+
+        return diceRollSetup;
+    }
+
+    void UpdateSetupName(string name)
+    {
+        newSetupNameField.text = name;
+    }
+
+    void CacheDiceRollSetup()
+    {
+        cachedTitle = newSetupNameField.text;
+        cachedSetup = CreateDiceRollSetup();
+    }
+
+    public void RecoverCachedDiceRollSetup()
+    {
+        eventManager.ChangeTitle(cachedTitle);
+        eventManager.LoadDiceScoreSetup(cachedSetup);
     }
 }

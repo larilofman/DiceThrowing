@@ -13,14 +13,14 @@ public class UIManager : MonoBehaviour
     public GameObject throwPanel;
     public GameObject rethrowPanel;
     public GameObject setupPanel;
-    public Button AcceptSetupButton;
+    public Button acceptSetupButton;
+    public Button saveSetupButton;
     public GameObject scoreDetailsPanel;
     public GameObject creditsPanel;
     public GameObject worldChangePanel;
     public TMP_Text warningText;
     public GameObject setupAcceptButton;
-    public GameObject setupSaveButton;
-    public GameObject setupCancelButton;
+    public GameObject adderContainer;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -91,18 +91,21 @@ public class UIManager : MonoBehaviour
 
         if(totalDice <= 0)
         {
-            AcceptSetupButton.interactable = false;
+            acceptSetupButton.interactable = false;
+            saveSetupButton.interactable = false;
             warningText.text = "Add at least one dice.";
             warningText.gameObject.SetActive(true);
         } else if(totalDice > GlobalSettings.Instance.maxDice)
         {
-            AcceptSetupButton.interactable = false;
+            acceptSetupButton.interactable = false;
+            saveSetupButton.interactable = false;
             warningText.text = $"Maximum amount of dice is {GlobalSettings.Instance.maxDice}.\n D100 counts as two.";
             warningText.gameObject.SetActive(true);
         } else
         {
             warningText.gameObject.SetActive(false);
-            AcceptSetupButton.interactable = true;
+            acceptSetupButton.interactable = true;
+            saveSetupButton.interactable = true;
         }
     }
 
@@ -140,8 +143,7 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         setupAcceptButton.SetActive(true);
-        setupSaveButton.SetActive(false);
-        setupCancelButton.SetActive(false);
+        adderContainer.SetActive(false);
         setupPanel.SetActive(true);
     }
 
@@ -149,8 +151,7 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         setupAcceptButton.SetActive(false);
-        setupSaveButton.SetActive(true);
-        setupCancelButton.SetActive(true);
+        adderContainer.SetActive(true);
         setupPanel.SetActive(true);
     }
 

@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class QuickSelect : MonoBehaviour
+public class QuickSelect : MonoBehaviour, IPointerClickHandler
 {
     public string DefaultText;  
     public EventManager eventManager;
@@ -15,6 +17,23 @@ public class QuickSelect : MonoBehaviour
         dropdown = GetComponent<TMP_Dropdown>();
         eventManager.EventDiceRollSetupsChanged.AddListener(BuildDropdown);
         dropdown.onValueChanged.AddListener(SelectSetup);
+    }
+
+    public void OnPointerClick(PointerEventData pointerEventData)
+    {
+        if (pointerEventData.button == PointerEventData.InputButton.Left)
+        {
+            DisableDeleteButtonFromAddNew();
+        }
+    }
+
+    private void DisableDeleteButtonFromAddNew()
+    {
+        Transform dropdownList = transform.GetChild(4);
+        Transform content = dropdownList.GetChild(0).GetChild(0);
+        Transform lastChild = content.GetChild(content.childCount - 1);
+        Button lastDeleteButton = lastChild.GetComponentInChildren<Button>();
+        lastDeleteButton.gameObject.SetActive(false);
     }
 
     private void SelectSetup(int index)

@@ -18,6 +18,7 @@ public class EventManager : MonoBehaviour
     public UnityEvent<DiceRollSetups> EventDiceRollSetupsChanged;
     public UnityEvent<DiceRollSetup> EventDiceRollSetupLoaded;
     public UnityEvent EventAddNewDiceRollSetupOpened;
+    public UnityEvent<string> EventTitleChanged;
 
     public void Ready()
     {
@@ -80,5 +81,10 @@ public class EventManager : MonoBehaviour
     public void OpenAddNewDiceRollSetup()
     {
         EventAddNewDiceRollSetupOpened.Invoke();
+    }
+
+    public void ChangeTitle(string title)
+    {
+        EventTitleChanged.Invoke(title);
     }
 }

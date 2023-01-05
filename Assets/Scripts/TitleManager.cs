@@ -9,11 +9,11 @@ public class TitleManager : MonoBehaviour
     public TextMeshProUGUI scoreTitle;
     private List<DiceAdjust> diceAdjusts;
     private List<BonusAdjust> bonusAdjusts;
-    private string title = "";
     void Awake()
     {
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventAdjustsChanged.AddListener(AdjustsChangedEventHandler);
+        eventManager.EventTitleChanged.AddListener(UpdateTitle);
     }
 
     void AdjustsSpawnedEventHandler(List<DiceAdjust> _diceAdjusts, List<BonusAdjust> _bonusAdjusts)
@@ -21,12 +21,12 @@ public class TitleManager : MonoBehaviour
         diceAdjusts = _diceAdjusts;
         bonusAdjusts = _bonusAdjusts;
 
-        UpdateTitle();
+        CreateTitle();
     }
 
     void AdjustsChangedEventHandler()
     {
-        UpdateTitle();
+        CreateTitle();
     }
 
     void CreateTitle()
@@ -74,12 +74,12 @@ public class TitleManager : MonoBehaviour
             }
         }
 
-        title = titleString;
+        eventManager.ChangeTitle(titleString);
     }
 
-    void UpdateTitle()
+    void UpdateTitle(string title)
     {
-        CreateTitle();
+
         scoreTitle.text = title;
     }
 }

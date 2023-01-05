@@ -267,6 +267,13 @@ public class DiceManager : MonoBehaviour
     {
         int maxWidth = 7;
         int maxHeight = 2;
+
+        if (GlobalSettings.Instance.isPortrait)
+        {
+            maxWidth = 3;
+            maxHeight = 4;
+        }
+
         float gap = 1.5f;
 
         List<Vector3> positions = new List<Vector3>();
