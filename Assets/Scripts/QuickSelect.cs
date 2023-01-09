@@ -41,7 +41,6 @@ public class QuickSelect : MonoBehaviour, IPointerClickHandler
             int buttonIndex = i;
             buttons[i].onClick.AddListener(delegate { OnDeleteButtonClick(buttonIndex); });
         }
-        Debug.Log(buttons.Length);
     }
 
     private void OnDeleteButtonClick(int index)
@@ -65,7 +64,6 @@ public class QuickSelect : MonoBehaviour, IPointerClickHandler
 
     private void BuildDropdown(DiceRollSetups _diceRollSetups)
     {
-
         dropdown.Hide();
 
         diceRollSetups = _diceRollSetups;
@@ -79,7 +77,7 @@ public class QuickSelect : MonoBehaviour, IPointerClickHandler
             options.Add(optionData);
         }
 
-        TMP_Dropdown.OptionData addNewOption = new TMP_Dropdown.OptionData("        Add new");
+        TMP_Dropdown.OptionData addNewOption = new TMP_Dropdown.OptionData("                    Add new");
         options.Add(addNewOption);
 
         dropdown.AddOptions(options);

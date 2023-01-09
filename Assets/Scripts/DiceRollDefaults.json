@@ -15,20 +15,14 @@
     {
       "diceRollData": [
         {
-          "name": "D4",
-          "amount": 2,
-          "bonus": true,
-          "penalty": false
-        },
-        {
-          "name": "D8",
-          "amount": 2,
+          "name": "D100",
+          "amount": 1,
           "bonus": false,
-          "penalty": true
+          "penalty": false
         }
       ],
-      "bonus": 2,
-      "name": "test"
+      "bonus": 0,
+      "name": "1D100"
     }
   ]
 }

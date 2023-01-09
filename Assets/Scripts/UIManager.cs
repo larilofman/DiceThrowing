@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text warningText;
     public GameObject setupAcceptButton;
     public GameObject adderContainer;
+    public Toggle clearTableToggle;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -123,6 +124,18 @@ public class UIManager : MonoBehaviour
         scoreDetailsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         worldChangePanel.SetActive(false);
+    }
+
+    public void OnThrowAgainPressed()
+    {
+        if (clearTableToggle.isOn)
+        {
+            eventManager.ThrowAgain();
+        } else
+        {
+            eventManager.ThrowMore();
+        }
+
     }
 
     public void ShowScore(bool hideOthers=false)

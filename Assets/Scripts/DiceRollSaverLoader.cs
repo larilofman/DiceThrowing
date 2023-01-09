@@ -15,7 +15,7 @@ public class DiceRollSaverLoader : MonoBehaviour
     private string cachedTitle = "";
     DiceRollSetup cachedSetup = null;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         eventManager = GetComponent<EventManager>();
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventListener);
@@ -24,6 +24,10 @@ public class DiceRollSaverLoader : MonoBehaviour
         eventManager.EventDiceRollSetupDeleted.AddListener(DeleteDiceRollSetup);
         LoadDiceRollSetups();
         //Debug.Log(JsonUtility.ToJson(diceRollSetups));
+    }
+    void Start()
+    {
+        LoadDiceRollSetups();
     }
 
     void AdjustsSpawnedEventListener(List<DiceAdjust> _diceAdjusts, List<BonusAdjust> _bonusAdjusts)
@@ -34,7 +38,8 @@ public class DiceRollSaverLoader : MonoBehaviour
 
     void LoadDiceRollSetups()
     {
-        diceRollSetups = JsonUtility.FromJson<DiceRollSetups>(diceRollDefaults.text);
+        string stringToLoad = PlayerPrefs.GetString("DiceRollData", diceRollDefaults.text);
+        diceRollSetups = JsonUtility.FromJson<DiceRollSetups>(stringToLoad);
         eventManager.UpdateDiceRollSetups(diceRollSetups);
     }
 
@@ -45,6 +50,8 @@ public class DiceRollSaverLoader : MonoBehaviour
         diceRollSetup.name = newSetupNameField.text;
         diceRollSetups.savedRolls.Add(diceRollSetup);
 
+        SaveData();
+
         eventManager.UpdateDiceRollSetups(diceRollSetups);
     }
 
@@ -52,7 +59,15 @@ public class DiceRollSaverLoader : MonoBehaviour
     {
         Debug.Log("deleting: " + index);
         diceRollSetups.savedRolls.RemoveAt(index);
+
+        SaveData();
+
         eventManager.UpdateDiceRollSetups(diceRollSetups);
+    }
+
+    void SaveData()
+    {
+        PlayerPrefs.SetString("DiceRollData", JsonUtility.ToJson(diceRollSetups));
     }
 
     DiceRollSetup CreateDiceRollSetup()
@@ -79,7 +94,16 @@ public class DiceRollSaverLoader : MonoBehaviour
 
     void UpdateSetupName(string name)
     {
-        newSetupNameField.text = name;
+        int maxLength = 50;
+        Debug.Log(name.Length);
+        if(name.Length > maxLength)
+        {
+            newSetupNameField.text = name[..maxLength];
+        } else
+        {
+            newSetupNameField.text = name;
+        }
+        
     }
 
     void CacheDiceRollSetup()
