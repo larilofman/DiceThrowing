@@ -28,6 +28,7 @@ public class DiceManager : MonoBehaviour
         eventManager.EventDiceStopped.AddListener(DiceStoppedEventHandler);
         eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
         eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
+        eventManager.EventClearTablePressed.AddListener(ClearTableEventHandler);
     }
 
     void Start()
@@ -139,6 +140,11 @@ public class DiceManager : MonoBehaviour
     void ThrowMorePressedEventHandler()
     {
         StartCoroutine(SpawnMoreDice());
+    }
+
+    void ClearTableEventHandler()
+    {
+        ClearStoredDice();
     }
 
     void ClearActiveDice()

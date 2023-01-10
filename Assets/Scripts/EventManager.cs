@@ -20,6 +20,7 @@ public class EventManager : MonoBehaviour
     public UnityEvent EventAddNewDiceRollSetupOpened;
     public UnityEvent<string> EventTitleChanged;
     public UnityEvent<int> EventDiceRollSetupDeleted;
+    public UnityEvent EventClearTablePressed;
 
     public void Ready()
     {
@@ -92,5 +93,10 @@ public class EventManager : MonoBehaviour
     public void DeleteDiceRollSetup(int index)
     {
         EventDiceRollSetupDeleted.Invoke(index);
+    }
+
+    public void ClearTable()
+    {
+        EventClearTablePressed.Invoke();
     }
 }

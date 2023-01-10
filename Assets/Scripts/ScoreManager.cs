@@ -18,6 +18,7 @@ public class ScoreManager : MonoBehaviour
         eventManager.EventAllDiceStopped.AddListener(AllDiceStoppedEventHandler);
         eventManager.EventThrowAgainPressed.AddListener(ThrowAgainPressedEventHandler);
         eventManager.EventThrowMorePressed.AddListener(ThrowMorePressedEventHandler);
+        eventManager.EventClearTablePressed.AddListener(ClearTableEventHandler);
     }
 
     void AllDiceStoppedEventHandler(List<DiceScore> diceScores, List<BonusAdjust> bonuses)
@@ -36,6 +37,11 @@ public class ScoreManager : MonoBehaviour
     {
         float delay = GlobalSettings.Instance.zoomOutTime;
         StartCoroutine(StoreScore(delay));
+    }
+
+    void ClearTableEventHandler()
+    {
+        StartCoroutine(ClearScore(0f));
     }
 
     IEnumerator ClearScore(float delay)
@@ -57,7 +63,7 @@ public class ScoreManager : MonoBehaviour
 
         if(throwNum == 1)
         {
-            InsertThrowNum(true);
+            InsertThrowNum();
         }
         currentScores.Clear();
     }
@@ -99,34 +105,48 @@ public class ScoreManager : MonoBehaviour
     public void InsertScore()
     {
         throwNum++;
+        int indexInParent = 0;
         if (throwNum > 1)
         {
-            InsertThrowNum(false);
+            InsertThrowNum();
+            indexInParent++;
         }
+
+        int throwTotal = 0;
 
         foreach (DiceResult diceResult in currentScores)
         {
             totalScore += diceResult.result;
+            throwTotal += diceResult.result;
 
             GameObject scoreTextObject = Instantiate(scoreTextPrefab, scoreTextParent);
+            scoreTextObject.transform.SetSiblingIndex(indexInParent);
 
             TextMeshProUGUI scoreText = scoreTextObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             scoreText.text = diceResult.result.ToString();
 
             TextMeshProUGUI typeText = scoreTextObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
             typeText.text = $"({diceResult.type})";
+
+            indexInParent++;
         }
+
+        GameObject totalScoreObject = Instantiate(scoreTextPrefab, scoreTextParent);
+        totalScoreObject.transform.SetSiblingIndex(indexInParent);
+
+        TextMeshProUGUI throwTotalScore = totalScoreObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        throwTotalScore.text = throwTotal.ToString();
+
+        TextMeshProUGUI throwTotalType = totalScoreObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        throwTotalType.text = "(Total)";
+
         totalScoreText.text = $"Total: {totalScore}";
     }
 
-    void InsertThrowNum(bool setAsFirst)
+    void InsertThrowNum()
     {
         GameObject scoreTextObject = Instantiate(scoreTextPrefab, scoreTextParent);
-
-        if (setAsFirst)
-        {
-            scoreTextObject.transform.SetAsFirstSibling();
-        }
+        scoreTextObject.transform.SetAsFirstSibling();
 
         TextMeshProUGUI scoreText = scoreTextObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         scoreText.text = $"<u>Throw {throwNum}:</u>";

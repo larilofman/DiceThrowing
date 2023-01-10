@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class DepthOfFieldController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class DepthOfFieldController : MonoBehaviour
     public DepthOfField depthOfField;
     public DiceManager diceManager;
     public CamMover camMover;
+    public Toggle dofToggle;
     float smoothSpeed = 5f;
 
     float distance;
@@ -20,6 +22,38 @@ public class DepthOfFieldController : MonoBehaviour
         if (!volumeProfile.TryGet(out depthOfField)) throw new System.NullReferenceException(nameof(depthOfField));
 
         camMover = GetComponent<CamMover>();
+
+        dofToggle.onValueChanged.AddListener(delegate { OnDofSettingChanged(dofToggle); });
+
+        GetStartDoF();
+    }
+
+    void GetStartDoF()
+    {
+        int dofSetting = 1;
+
+        if (PlayerPrefs.HasKey("DoF"))
+        {
+            dofSetting = PlayerPrefs.GetInt("DoF");
+        }
+        
+        bool enabled = dofSetting > 0 ? true : false;
+        dofToggle.isOn = enabled;
+
+        ToggleDoF(enabled);
+    }
+
+    void OnDofSettingChanged(Toggle toggle)
+    {
+        int dofSetting = toggle.isOn ? 1 : 0;
+        PlayerPrefs.SetInt("DoF", dofSetting);
+
+        ToggleDoF(toggle.isOn);
+    }
+
+    void ToggleDoF(bool enabled)
+    {
+        depthOfField.active = enabled;
     }
 
     // Update is called once per frame

@@ -95,7 +95,6 @@ public class DiceRollSaverLoader : MonoBehaviour
     void UpdateSetupName(string name)
     {
         int maxLength = 50;
-        Debug.Log(name.Length);
         if(name.Length > maxLength)
         {
             newSetupNameField.text = name[..maxLength];

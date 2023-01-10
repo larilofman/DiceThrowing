@@ -16,12 +16,14 @@ public class UIManager : MonoBehaviour
     public Button acceptSetupButton;
     public Button saveSetupButton;
     public GameObject scoreDetailsPanel;
-    public GameObject creditsPanel;
-    public GameObject worldChangePanel;
+    public GameObject menuPanel;
     public TMP_Text warningText;
     public GameObject setupAcceptButton;
     public GameObject adderContainer;
     public Toggle clearTableToggle;
+    public GameObject menuButton;
+    public Button clearTableButton;
+    private bool somethingToClear = false;
     private List<DiceAdjust> diceAdjusts = new List<DiceAdjust>();
 
     void Awake()
@@ -36,6 +38,13 @@ public class UIManager : MonoBehaviour
         eventManager.EventAdjustsSpawned.AddListener(AdjustsSpawnedEventHandler);
         eventManager.EventAdjustsChanged.AddListener(AdjustsChangedEventHandler);
         eventManager.EventAddNewDiceRollSetupOpened.AddListener(AddNewDiceRollSetupHandler);
+        eventManager.EventClearTablePressed.AddListener(ClearTableEventHandler);
+    }
+
+    void ClearTableEventHandler()
+    {
+        somethingToClear = false;
+        clearTableButton.gameObject.SetActive(false);
     }
 
     void DiceThrownEventHandler()
@@ -65,11 +74,13 @@ public class UIManager : MonoBehaviour
 
     void ThrowAgainPressedEventHandler()
     {
+        somethingToClear = false;
         StartCoroutine(ThrowAgain());
     }
 
     void ThrowMorePressedEventHandler()
     {
+        somethingToClear = true;
         StartCoroutine(ThrowMore());
     }
 
@@ -122,8 +133,8 @@ public class UIManager : MonoBehaviour
         setupPanel.SetActive(false);
         rethrowPanel.SetActive(false);
         scoreDetailsPanel.SetActive(false);
-        creditsPanel.SetActive(false);
-        worldChangePanel.SetActive(false);
+        menuPanel.SetActive(false);
+        menuButton.SetActive(false);
     }
 
     public void OnThrowAgainPressed()
@@ -144,12 +155,13 @@ public class UIManager : MonoBehaviour
         {
             HideUI();
         }
-        scorePanel.SetActive(true);       
+        scorePanel.SetActive(true);
     }
 
     public void ShowRethrow()
     {
         rethrowPanel.SetActive(true);
+        menuButton.SetActive(true);
     }
 
     public void ShowSetup()
@@ -158,6 +170,7 @@ public class UIManager : MonoBehaviour
         setupAcceptButton.SetActive(true);
         adderContainer.SetActive(false);
         setupPanel.SetActive(true);
+        menuButton.SetActive(true);
     }
 
     void ShowAddDiceRollSetup()
@@ -172,7 +185,9 @@ public class UIManager : MonoBehaviour
     {
         HideUI();
         throwPanel.SetActive(true);
-        worldChangePanel.SetActive(true);
+        menuButton.SetActive(true);
+
+        clearTableButton.gameObject.SetActive(somethingToClear);
     }
 
     public void ToggleScoreDetails()
@@ -180,14 +195,14 @@ public class UIManager : MonoBehaviour
         scoreDetailsPanel.SetActive(!scoreDetailsPanel.activeSelf);
     }
 
-    public void ShowCredits()
+    public void ShowMenu()
     {
-        creditsPanel.SetActive(true);
+        menuPanel.SetActive(true);
     }
 
-    public void HideCredits()
+    public void HideMenu()
     {
-        creditsPanel.SetActive(false);
+        menuPanel.SetActive(false);
     }
 
     private IEnumerator ThrowFinished()
