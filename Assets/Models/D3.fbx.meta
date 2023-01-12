@@ -1,38 +1,9 @@
 fileFormatVersion: 2
-guid: 3ef3548f89cca02449f1da679bb7e118
+guid: f52aff4c1c7700042821f46e58c9d227
 ModelImporter:
   serializedVersion: 21300
-  internalIDToNameTable:
-  - first:
-      74: -6384415949673249562
-    second: Cube|NopanHeiluminen
-  - first:
-      74: -2358463511864672729
-    second: Cube|NopanHeilunta
-  - first:
-      74: 6121505715369664439
-    second: Cube|Cube|Cube|NopanHeiluminen|Cube|NopanHeiluminen
-  - first:
-      74: 445166473719250785
-    second: Cube|Cube|Cube|NopanHeilunta|Cube|NopanHeilunta
-  - first:
-      74: -6138086166145996678
-    second: Cube|Cube|Cube|Cube|Cube|NopanHeiluminen|Cube|NopanHeiluminen|Cube|C
-  - first:
-      74: -165853774625017391
-    second: Cube|Cube|Cube|Cube|Cube|NopanHeilunta|Cube|NopanHeilunta|Cube|Cube|
-  - first:
-      74: -9047902174295356953
-    second: Cube|Cube|Cube|Cube|Cube|NopanHeiluminen|Cube|NopanHeiluminen|Cu.000
-  - first:
-      74: 5147805250845205120
-    second: Cube|Cube|Cube|Cube|Cube|NopanHeilunta|Cube|NopanHeilunta|Cube|C.000
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: c67333232a3f638448b64fdd475b512c, type: 2}
+  internalIDToNameTable: []
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -128,7 +99,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
-  remapMaterialsIfMaterialImportModeIsNone: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
