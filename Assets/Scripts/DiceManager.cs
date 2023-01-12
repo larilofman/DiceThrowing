@@ -206,7 +206,7 @@ public class DiceManager : MonoBehaviour
             totalDice += diceAdjust.GetAmount();
 
             // D100 (and possibly other non-normal dice that use more than one visible dice)
-            if (diceAdjust.dicePrefab.name.Length > 3)
+            if (diceAdjust.dicePrefab.name == "D100" || diceAdjust.dicePrefab.name == "D99")
             {
                 totalDice += diceAdjust.GetAmount();
             }
@@ -248,7 +248,7 @@ public class DiceManager : MonoBehaviour
                 }
 
                 // D100 (and possibly other non-normal dice that use more than one visible dice)
-                if (diceAdjust.dicePrefab.name.Length > 3 && diceAdjust.dicePrefab.name == "D100")
+                if (diceAdjust.dicePrefab.name == "D100" || diceAdjust.dicePrefab.name == "D99")
                 {
                     D100Score d100Score = instantiatedDice.GetComponent<D100Score>();
                     GameObject childDicePrefab = d100Score.childDicePrefab;

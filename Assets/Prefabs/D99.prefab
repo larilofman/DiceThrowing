@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: -7435403940646856207}
   - component: {fileID: 8925101935697641655}
   m_Layer: 0
-  m_Name: D100
+  m_Name: D99
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +303,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   childDicePrefab: {fileID: 6620160644590663068, guid: 3e884cca62bd23c44aea35d06b374465, type: 3}
   childDiceScore: {fileID: 0}
-  doubleZeroAs100: 1
 --- !u!114 &6277702140812445888
 MonoBehaviour:
   m_ObjectHideFlags: 0

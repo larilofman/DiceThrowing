@@ -6,6 +6,7 @@ public class D100Score : DiceScore
 {
     public GameObject childDicePrefab;
     public D100ChildScore childDiceScore;
+    public bool doubleZeroAs100;
     private bool childStopped;
 
     public void InitChild(GameObject childDice)
@@ -51,7 +52,7 @@ public class D100Score : DiceScore
         int score = int.Parse(highestSide.name) * 10;
 
         score += childDiceScore.GetResult();
-        if(score == 0)
+        if(doubleZeroAs100 && score == 0)
         {
             return 100;
         }

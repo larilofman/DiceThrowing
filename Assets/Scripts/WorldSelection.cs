@@ -20,6 +20,19 @@ public class WorldSelection : MonoBehaviour
 
         dropdown.AddOptions(worldNames);
         dropdown.onValueChanged.AddListener(ChangeWorld);
+
+        int loadedIndex = 0;
+        if (PlayerPrefs.HasKey("WorldIndex"))
+        {
+            loadedIndex = PlayerPrefs.GetInt("WorldIndex");
+        }
+
+        if(loadedIndex > 0)
+        {
+            dropdown.SetValueWithoutNotify(loadedIndex);
+            ChangeWorld(loadedIndex);
+        }
+
     }
 
     void ChangeWorld(int worldID)
@@ -35,5 +48,7 @@ public class WorldSelection : MonoBehaviour
                 world.SetActive(false);
             }
         }
+
+        PlayerPrefs.SetInt("WorldIndex", worldID);
     }
 }

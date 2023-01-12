@@ -95,7 +95,7 @@ public class UIManager : MonoBehaviour
         foreach (DiceAdjust diceAdjust in diceAdjusts)
         {
             totalDice += diceAdjust.GetAmount();
-            if(diceAdjust.dicePrefab.name == "D100")
+            if(diceAdjust.dicePrefab.name == "D100" || diceAdjust.dicePrefab.name == "D99")
             {
                 totalDice += diceAdjust.GetAmount();
             }
@@ -111,7 +111,7 @@ public class UIManager : MonoBehaviour
         {
             acceptSetupButton.interactable = false;
             saveSetupButton.interactable = false;
-            warningText.text = $"Maximum amount of dice is {GlobalSettings.Instance.maxDice}.\n D100 counts as two.";
+            warningText.text = $"Maximum amount of dice is {GlobalSettings.Instance.maxDice}.\n D100 and D99 counts as two.";
             warningText.gameObject.SetActive(true);
         } else
         {
